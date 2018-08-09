@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.vas.dao.ScGbzdrDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.renren.vas.entity.ScGbzdrEntity" id="scGbzdrMap">
+        <result property="drybh" column="DRYBH"/>
+        <result property="xm" column="XM"/>
+        <result property="xb" column="XB"/>
+        <result property="csrq" column="CSRQ"/>
+        <result property="sfzh" column="SFZH"/>
+        <result property="hjdqh" column="HJDQH"/>
+        <result property="hjdxz" column="HJDXZ"/>
+        <result property="xzdqh" column="XZDQH"/>
+        <result property="xzdxz" column="XZDXZ"/>
+    </resultMap>
+
+	<select id="queryObject" resultType="io.renren.vas.entity.ScGbzdrEntity">
+		select * from sc_gbzdr where DRYBH = ${value}
+	</select>
+
+	<select id="queryList" resultType="io.renren.vas.entity.ScGbzdrEntity">
+		select * from sc_gbzdr order by DRYBH asc
+		<if test="offset != null and limit != null">
+			limit ${limit} offset ${offset}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from sc_gbzdr 
+	</select>
+	 
+	<insert id="save" parameterType="io.renren.vas.entity.ScGbzdrEntity">
+		insert into sc_gbzdr
+		(
+			DRYBH, 
+			XM, 
+			XB, 
+			CSRQ, 
+			SFZH, 
+			HJDQH, 
+			HJDXZ, 
+			XZDQH, 
+			XZDXZ
+		)
+		values 
+		(
+			(select coalesce(max(drybh),0)+1 from sc_gbzdr), 
+			'${xm}', 
+			'${xb}', 
+			'${csrq}', 
+			'${sfzh}', 
+			'${hjdqh}', 
+			'${hjdxz}', 
+			'${xzdqh}', 
+			'${xzdxz}'
+		)
+	</insert>
+	 
+		<update id="update" parameterType="io.renren.vas.entity.ScGbzdrEntity">
+		update sc_gbzdr 
+		<set>
+			<if test="xm != null">XM = #{xm}, </if>
+			<if test="xb != null">XB = #{xb}, </if>
+			<if test="csrq != null">CSRQ = #{csrq}, </if>
+			<if test="sfzh != null">SFZH = #{sfzh}, </if>
+			<if test="hjdqh != null">HJDQH = #{hjdqh}, </if>
+			<if test="hjdxz != null">HJDXZ = #{hjdxz}, </if>
+			<if test="xzdqh != null">XZDQH = #{xzdqh}, </if>
+			<if test="xzdxz != null">XZDXZ = #{xzdxz}</if>
+		</set>
+		where DRYBH = ${drybh}
+	</update>
+	
+	<delete id="delete">
+		delete from sc_gbzdr where DRYBH = ${value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from sc_gbzdr where DRYBH in 
+		<foreach item="drybh" collection="array" open="(" separator="," close=")">
+			${drybh}
+		</foreach>
+	</delete>
+
+</mapper>

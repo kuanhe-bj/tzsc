@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.vas.dao.ScEtcptjdDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.renren.vas.entity.ScEtcptjdEntity" id="scEtcptjdMap">
+        <result property="eid" column="EID"/>
+        <result property="carNumber" column="CAR_NUMBER"/>
+        <result property="enterTime" column="ENTER_TIME"/>
+        <result property="exitTime" column="EXIT_TIME"/>
+        <result property="enterImg" column="ENTER_IMG"/>
+        <result property="exitImg" column="EXIT_IMG"/>
+        <result property="parkNm" column="PARK_NM"/>
+        <result property="adress" column="ADRESS"/>
+        <result property="districtNm" column="DISTRICT_NM"/>
+        <result property="jingdu" column="JINGDU"/>
+        <result property="weidu" column="WEIDU"/>
+        <result property="districtNmId" column="DISTRICT_NM_ID"/>
+        <result property="sjly" column="SJLY"/>
+    </resultMap>
+
+	<select id="queryObject" resultType="io.renren.vas.entity.ScEtcptjdEntity">
+		select * from sc_etcptjd where EID = #{value}
+	</select>
+
+	<select id="queryList" resultType="io.renren.vas.entity.ScEtcptjdEntity">
+		select * from sc_etcptjd
+		<where>
+			<if test="cph != null">
+				and CAR_NUMBER = #{cph} and ENTER_TIME >= #{qssj} and EXIT_TIME &lt;= #{jssj}
+			</if>
+		</where>
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by EID desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+	
+	
+	<select id="checkList" resultType="io.renren.vas.entity.ScEtcptjdEntity">
+		select * from sc_etcptjd
+		<where>
+			<if test="cph != null">
+				and CAR_NUMBER = #{cph} and ENTER_TIME >= #{qssj} and EXIT_TIME &lt;= #{jssj}
+			</if>
+			
+		</where>
+	</select>
+	
+	<select id="hotPoints" resultType="io.renren.vo.KakouRecordVo">
+		select count(*) number,DISTRICT_NM,JINGDU,WEIDU from sc_etcptjd group by DISTRICT_NM
+		
+	</select>
+	
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from sc_etcptjd 
+	</select>
+	 
+	<insert id="save" parameterType="io.renren.vas.entity.ScEtcptjdEntity">
+		insert into sc_etcptjd
+		(
+			`EID`, 
+			`CAR_NUMBER`, 
+			`ENTER_TIME`, 
+			`EXIT_TIME`, 
+			`ENTER_IMG`, 
+			`EXIT_IMG`, 
+			`PARK_NM`, 
+			`ADRESS`, 
+			`DISTRICT_NM`, 
+			`JINGDU`, 
+			`WEIDU`, 
+			`DISTRICT_NM_ID`, 
+			`SJLY`
+		)
+		values
+		(
+			#{eid}, 
+			#{carNumber}, 
+			#{enterTime}, 
+			#{exitTime}, 
+			#{enterImg}, 
+			#{exitImg}, 
+			#{parkNm}, 
+			#{adress}, 
+			#{districtNm}, 
+			#{jingdu}, 
+			#{weidu}, 
+			#{districtNmId}, 
+			#{sjly}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="io.renren.vas.entity.ScEtcptjdEntity">
+		update sc_etcptjd 
+		<set>
+			<if test="carNumber != null">`CAR_NUMBER` = #{carNumber}, </if>
+			<if test="enterTime != null">`ENTER_TIME` = #{enterTime}, </if>
+			<if test="exitTime != null">`EXIT_TIME` = #{exitTime}, </if>
+			<if test="enterImg != null">`ENTER_IMG` = #{enterImg}, </if>
+			<if test="exitImg != null">`EXIT_IMG` = #{exitImg}, </if>
+			<if test="parkNm != null">`PARK_NM` = #{parkNm}, </if>
+			<if test="adress != null">`ADRESS` = #{adress}, </if>
+			<if test="districtNm != null">`DISTRICT_NM` = #{districtNm}, </if>
+			<if test="jingdu != null">`JINGDU` = #{jingdu}, </if>
+			<if test="weidu != null">`WEIDU` = #{weidu}, </if>
+			<if test="districtNmId != null">`DISTRICT_NM_ID` = #{districtNmId}, </if>
+			<if test="sjly != null">`SJLY` = #{sjly}</if>
+		</set>
+		where EID = #{eid}
+	</update>
+	
+	<delete id="delete">
+		delete from sc_etcptjd where EID = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from sc_etcptjd where EID in 
+		<foreach item="eid" collection="array" open="(" separator="," close=")">
+			#{eid}
+		</foreach>
+	</delete>
+
+</mapper>

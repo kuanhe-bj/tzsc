@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.vas.dao.ScJczxx113Dao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.renren.vas.entity.ScJczxx113Entity" id="scJczxx113Map">
+        <result property="id" column="ID"/>
+        <result property="cph" column="CPH"/>
+        <result property="clys" column="CLYS"/>
+        <result property="sd" column="SD"/>
+        <result property="ttid" column="TTID"/>
+        <result property="psdd" column="PSDD"/>
+        <result property="pssj" column="PSSJ"/>
+        <result property="rksj" column="RKSJ"/>
+        <result property="tplj" column="TPLJ"/>
+        <result property="splj" column="SPLJ"/>
+        <result property="kdid" column="KDID"/>
+    </resultMap>
+
+	<select id="queryObject" resultType="io.renren.vas.entity.ScJczxx113Entity">
+		select * from sc_jczxx113 where ID = ${value}
+	</select>
+	
+<!-- 	精确查询 -->
+
+    <select id="query113List" resultType="io.renren.vas.entity.ScJczxx113Entity">
+		select * from sc_jczxx113 where CPH = #{chp} and PSSJ between #{startTime} and #{endTime}
+    </select>
+	
+	
+	
+	<select id="queryList" resultType="io.renren.vas.entity.ScJczxx113Entity">
+		select * from sc_jczxx113
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by ID desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{limit} offset #{offset}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from sc_jczxx113 
+	</select>
+	 
+	<insert id="save" parameterType="io.renren.vas.entity.ScJczxx113Entity" useGeneratedKeys="true" keyProperty="id">
+		insert into sc_jczxx113
+		(
+			ID, 
+			CPH, 
+			CLYS, 
+			SD, 
+			TTID, 
+			PSDD, 
+			PSSJ, 
+			RKSJ, 
+			TPLJ, 
+			SPLJ, 
+			KDID
+		)
+		values
+		(
+			#{id}, 
+			#{cph}, 
+			#{clys}, 
+			#{sd}, 
+			#{ttid}, 
+			#{psdd}, 
+			#{pssj}, 
+			#{rksj}, 
+			#{tplj}, 
+			#{splj}, 
+			#{kdid}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="io.renren.vas.entity.ScJczxx113Entity">
+		update sc_jczxx113 
+		<set>
+			<if test="cph != null">CPH = #{cph}, </if>
+			<if test="clys != null">CLYS = #{clys}, </if>
+			<if test="sd != null">SD = #{sd}, </if>
+			<if test="ttid != null">TTID = #{ttid}, </if>
+			<if test="psdd != null">PSDD = #{psdd}, </if>
+			<if test="pssj != null">PSSJ = #{pssj}, </if>
+			<if test="rksj != null">RKSJ = #{rksj}, </if>
+			<if test="tplj != null">TPLJ = #{tplj}, </if>
+			<if test="splj != null">SPLJ = #{splj}, </if>
+			<if test="kdid != null">KDID = #{kdid}</if>
+		</set>
+		where ID = ${id}
+	</update>
+	
+	<delete id="delete">
+		delete from sc_jczxx113 where ID = ${value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from sc_jczxx113 where ID in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			${id}
+		</foreach>
+	</delete>
+
+</mapper>

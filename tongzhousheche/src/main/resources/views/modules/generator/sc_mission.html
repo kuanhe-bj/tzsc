@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title></title>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta
+	content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+	name="viewport">
+<link rel="stylesheet" href="../../css/bootstrap.min.css">
+<link rel="stylesheet" href="../../css/font-awesome.min.css">
+<link rel="stylesheet"
+	href="../../plugins/jqgrid/ui.jqgrid-bootstrap.css">
+<link rel="stylesheet"
+	href="../../plugins/ztree/css/metroStyle/metroStyle.css">
+<link rel="stylesheet" href="../../css/main.css">
+<script src="../../libs/jquery.min.js"></script>
+<script src="../../plugins/layer/layer.js"></script>
+<script src="../../libs/bootstrap.min.js"></script>
+<script src="../../libs/vue.min.js"></script>
+<script src="../../plugins/jqgrid/grid.locale-cn.js"></script>
+<script src="../../plugins/jqgrid/jquery.jqGrid.min.js"></script>
+<script src="../../plugins/ztree/jquery.ztree.all.min.js"></script>
+<script src="../../js/common.js"></script>
+
+</head>
+<body>
+	<div id="rrapp" v-cloak>
+		<div v-show="showList">
+			<div class="grid-btn">
+				<div class="form-group col-sm-2">
+					<select class="form-control" id="sel" name="sel" v-model="q.sel"
+						onchange="javascript:doit();">
+						<!-- 					    <option selected="selected">请选择</option>  -->
+						<option value="1">隐匿车辆分析</option>
+						<option value="2">异常轨迹分析</option>
+						<option value="3">限行分析</option>
+						<option value="4">套牌分析</option>
+						<option value="5">次数异常分析</option>
+						<option value="6">盗抢车辆分析</option>
+						<option value="7">昼伏夜出分析</option>
+					</select>
+				</div>
+				<div class="form-group col-sm-2" id="div1"
+					style="display:none; width: 268px; height: 34px;">
+					<input type="text" class="form-control" id="time1"
+						v-model="q.time1" name="time1" onblur="SetQssj(this.value)"
+						placeholder="开始时间" style="display: none;">
+				</div>
+				<div class="form-group col-sm-2" id="div2"
+					style="display: none; width: 268px; height: 34px;">
+					<input type="text" class="form-control" id="time2"
+						v-model="q.time2" name="time2" onblur="SetJssj(this.value)"
+						placeholder="结束时间" style="display: none;">
+				</div>
+
+
+				<div class="form-group col-sm-2" id="div3" style="display: none;">
+					<input type="text" class="form-control" id="num" v-model="q.num"
+						name="num" placeholder="倍数" style="display: none;" />
+				</div>
+				
+				
+				<div class="form-group col-sm-2" id="div4" style="display: none;">
+					
+						<input type="text" class="form-control" id="btcxc" name="carNum" v-model="q.btcxc" placeholder="白天出现次数从" style="display: none;"/>
+				</div>
+				<div class="form-group col-sm-2" id="div5" style="display: none;">
+					
+						<input type="text" class="form-control" id="btcxd" name="carNum" v-model="q.btcxd" placeholder="白天出现次数到" style="display: none;"/>
+				</div>
+				<div class="form-group col-sm-2" id="div6" style="display: none;">
+					
+						<input type="text" class="form-control" id="wscxc" name="carNum" v-model="q.wscxc" placeholder="晚上出现次数从" style="display: none;"/>
+				</div>
+				<div class="form-group col-sm-2" id="div7" style="display: none;">
+					
+						<input type="text" class="form-control" id="wscxd" name="carNum" v-model="q.wscxd" placeholder="晚上出现次数到" style="display: none;"/>
+				</div>
+				<div class="form-group col-sm-2" id="div8" style="display: none;">
+					
+						<input type="text" class="form-control" id="fxc" name="carNum" v-model="q.fxc" placeholder="分析日期从" readonly="readonly" style="display: none;"/>
+				</div>
+				<div class="form-group col-sm-2" id="div9" style="display: none;">
+					
+						<input type="text" class="form-control" id="fxd" name="carNum" v-model="q.fxd" placeholder="分析日期到" readonly="readonly" style="display: none;"/>
+				</div>
+				<div class="form-group col-sm-2" id="div10" style="display: none;">
+					
+						<input type="text" class="form-control" id="btc" name="carNum" v-model="q.btc" placeholder="白天时间从" readonly="readonly" style="display: none;"/>
+				</div>
+				<div class="form-group col-sm-2" id="div11" style="display: none;">
+					
+						<input type="text" class="form-control" id="btd" name="carNum" v-model="q.btd" placeholder="白天时间到" readonly="readonly" style="display: none;"/>
+				</div>
+				<div class="form-group col-sm-2" id="div12" style="display: none;">
+					
+						<input type="text" class="form-control" id="ycc" name="carNum" v-model="q.ycc" placeholder="夜出时间从" readonly="readonly" style="display: none;"/>
+				</div>
+				<div class="form-group col-sm-2" id="div13" style="display: none;">
+					
+						<input type="text" class="form-control" id="ycd" name="carNum" v-model="q.ycd" placeholder="夜出时间到" readonly="readonly" style="display: none;"/>
+				</div>
+				
+				
+				<br /> <br /> <br />
+				<a class="btn btn-primary" @click="query" style = "margin-left:10px;"
+					style="background-color: #337ab7;">创建</a>
+					<a class="btn btn-primary" @click="tuisong"
+					style="background-color: #337ab7;">推送</a>
+				<button v-if="hasPermission('generator:scbdqcl:delete')"
+					style="background-color: #337ab7;" class="btn btn-primary"
+					@click="del">
+					<i class="fa fa-trash-o"></i>&nbsp;删除
+				</button>
+				<!-- 					 <a class="btn btn-primary" @click="query"  -->
+				<!-- 					style="background-color: #337ab7;">创建</a>   -->
+			</div>
+
+			<table id="jqGrid"></table>
+			<div id="jqGridPager"></div>
+		</div>
+
+		<div v-show="!showList" class="panel panel-default">
+			<div class="panel-heading">{{title}}</div>
+			<form class="form-horizontal">
+				<div class="form-group">
+					<div class="col-sm-2 control-label">用户名</div>
+					<div class="col-sm-10">
+						<input id="owner" type="text" class="form-control" 
+							v-model="scMission.owner" placeholder=""  />
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-2 control-label">任务编号</div>
+					<div class="col-sm-10">
+						<input id="id" type="text" class="form-control"
+							v-model="scMission.id" placeholder="" />
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-2 control-label"></div>
+					<input type="button" class="btn btn-primary" @click="copy" value="确定" /> &nbsp;&nbsp;
+					<input type="button" class="btn btn-warning" @click="reload" value="返回" />
+				</div>
+			</form>
+		</div>
+
+	</div>
+
+
+
+
+	<script src="../../js/modules/generator/sc_mission.js"></script>
+
+	<script type="text/javascript"> 
+	function a(obj){return document.getElementById(obj);} 
+	function show(objid) {a(objid).style.display='inline';} 
+	function hidden(objid) {a(objid).style.display='none';} 
+	function doit(){ 
+	var sel_val=a('sel').value; 
+	if (sel_val=='') {hidden('div1');hidden('div2');hidden('div3');hidden('time1');hidden('time2');hidden('num');
+	hidden('div4');hidden('div5');hidden('div6');hidden('div7');hidden('div8');hidden('div9');hidden('div10');
+	hidden('div11');hidden('div12');hidden('div13');hidden('btcxc');hidden('btcxd');hidden('wscxc');
+	hidden('wscxd');hidden('fxc');hidden('fxd');hidden('btc');hidden('btd');hidden('ycc');hidden('ycd');
+	} 
+	if (sel_val==0) {hidden('div1');hidden('div2');hidden('div3');hidden('time1');hidden('time2');hidden('num');
+	hidden('div4');hidden('div5');hidden('div6');hidden('div7');hidden('div8');hidden('div9');hidden('div10');
+	hidden('div11');hidden('div12');hidden('div13');hidden('btcxc');hidden('btcxd');hidden('wscxc');
+	hidden('wscxd');hidden('fxc');hidden('fxd');hidden('btc');hidden('btd');hidden('ycc');hidden('ycd');
+	} 
+	if (sel_val==1) {show('div1');show('div2');show('time1');show('time2');hidden('div3');hidden('num');
+	hidden('div4');hidden('div5');hidden('div6');hidden('div7');hidden('div8');hidden('div9');hidden('div10');
+	hidden('div11');hidden('div12');hidden('div13');hidden('btcxc');hidden('btcxd');hidden('wscxc');
+	hidden('wscxd');hidden('fxc');hidden('fxd');hidden('btc');hidden('btd');hidden('ycc');hidden('ycd');
+	} 
+	if (sel_val==2) {show('div1');show('div2');show('time1');show('time2');hidden('div3');hidden('num');
+	hidden('div4');hidden('div5');hidden('div6');hidden('div7');hidden('div8');hidden('div9');hidden('div10');
+	hidden('div11');hidden('div12');hidden('div13');hidden('btcxc');hidden('btcxd');hidden('wscxc');
+	hidden('wscxd');hidden('fxc');hidden('fxd');hidden('btc');hidden('btd');hidden('ycc');hidden('ycd');
+	}
+	if (sel_val==3) {show('div1');show('div2');show('time1');show('time2');hidden('div3');hidden('num');
+	hidden('div4');hidden('div5');hidden('div6');hidden('div7');hidden('div8');hidden('div9');hidden('div10');
+	hidden('div11');hidden('div12');hidden('div13');hidden('btcxc');hidden('btcxd');hidden('wscxc');
+	hidden('wscxd');hidden('fxc');hidden('fxd');hidden('btc');hidden('btd');hidden('ycc');hidden('ycd');
+	}
+	if (sel_val==4) {show('div1');show('div2');show('time1');show('time2');hidden('div3');hidden('num');
+	hidden('div4');hidden('div5');hidden('div6');hidden('div7');hidden('div8');hidden('div9');hidden('div10');
+	hidden('div11');hidden('div12');hidden('div13');hidden('btcxc');hidden('btcxd');hidden('wscxc');
+	hidden('wscxd');hidden('fxc');hidden('fxd');hidden('btc');hidden('btd');hidden('ycc');hidden('ycd');
+	}
+	if (sel_val==5) {show('div3');show('num');hidden('div1');hidden('div2');
+	hidden('div4');hidden('div5');hidden('div6');hidden('div7');hidden('div8');hidden('div9');hidden('div10');
+	hidden('div11');hidden('div12');hidden('div13');hidden('btcxc');hidden('btcxd');hidden('wscxc');
+	hidden('wscxd');hidden('fxc');hidden('fxd');hidden('btc');hidden('btd');hidden('ycc');hidden('ycd');
+	} 
+	if (sel_val==6) {show('div3');show('num');hidden('div1');hidden('div2');
+	hidden('div4');hidden('div5');hidden('div6');hidden('div7');hidden('div8');hidden('div9');hidden('div10');
+	hidden('div11');hidden('div12');hidden('div13');hidden('btcxc');hidden('btcxd');hidden('wscxc');
+	hidden('wscxd');hidden('fxc');hidden('fxd');hidden('btc');hidden('btd');hidden('ycc');hidden('ycd');
+	} 
+	if (sel_val==7) {hidden('div1');hidden('div2');hidden('div3');hidden('time1');hidden('time2');hidden('num');
+						show('div4');show('div5');show('div6');show('div7');show('div8');show('div9');show('div10');
+						show('div11');show('div12');show('div13');show('btcxc');show('btcxd');show('wscxc');
+						show('wscxd');show('fxc');show('fxd');show('btc');show('btd');show('ycc');show('ycd');
+					} 
+	} 
+	</script>
+
+	<script src="../../vasMap/laydate-master/dist/laydate.js"></script>
+	<script>
+	
+	laydate.render({
+		elem : '#fxc',
+		type : 'date'
+	});
+	laydate.render({
+		elem : '#fxd',
+		type : 'date'
+	});
+	laydate.render({
+		elem : '#btc',
+		type : 'time'
+	});
+	laydate.render({
+		elem : '#btd',
+		type : 'time'
+	});
+	laydate.render({
+		elem : '#ycc',
+		type : 'time'
+	});
+	laydate.render({
+		elem : '#ycd',
+		type : 'time'
+	});
+	
+	
+	laydate.render({
+		elem : '#time1'
+	});
+	laydate.render({
+		elem : '#time2'
+	});
+	function SetQssj(datas) {
+		var qssj = $('#time1').val(datas);
+	}
+	function SetJssj(datas) {
+		var jssj = $('#time2').val(datas);
+	}
+	
+	
+<!-- 	<script type="text/javascript"> -->
+<!--  		function check() { -->
+<!--  			var plate = $("#plate").val(); -->
+<!--  			if (plate.length >= 10) { -->
+<!--  				$("#msg").css("color", "red"); -->
+<!--  				$("#msg").html("输入长度不超过10个字符！"); -->
+<!-- 			} else if (plate == "") { -->
+<!--  				$("#msg").css("color", "red"); -->
+<!-- 				$("#msg").html("请输入车牌号！"); -->
+<!-- 			} else { -->
+<!-- 				$("#msg").css("color", "green"); -->
+<!-- 				$("#msg").html("输入符合规范！"); -->
+<!-- 			} -->
+<!-- 		} -->
+	</script>
+</body>
+</html>

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.vas.dao.ScJsrsjDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.renren.vas.entity.ScJsrsjEntity" id="scJsrsjMap">
+        <result property="xm" column="XM"/>
+        <result property="sfzmhm" column="SFZMHM"/>
+        <result property="csrq" column="CSRQ"/>
+        <result property="djzsxxdz" column="DJZSXXDZ"/>
+        <result property="djzsxzqh" column="DJZSXZQH"/>
+        <result property="dataid" column="DATAID"/>
+    </resultMap>
+
+	<select id="queryObject" resultType="io.renren.vas.entity.ScJsrsjEntity">
+		select * from sc_jsrsj where dataid = #{value}
+	</select>
+
+	<select id="queryList" resultType="io.renren.vas.entity.ScJsrsjEntity">
+		select * from sc_jsrsj
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by DATAID desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit  #{limit} offset #{offset}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from sc_jsrsj 
+	</select>
+	 
+	<insert id="save" parameterType="io.renren.vas.entity.ScJsrsjEntity">
+		insert into sc_jsrsj
+		(
+			xm, 
+			sfzmhm, 
+			csrq, 
+			djzsxxdz, 
+			djzsxzqh, 
+			dataid
+		)
+		values
+		(
+			#{xm}, 
+			#{sfzmhm}, 
+			'${csrq}', 
+			#{djzsxxdz}, 
+			#{djzsxzqh}, 
+			(select coalesce(max(dataid),0)+1 from sc_jsrsj)
+		)
+	</insert>
+	 
+	<insert id="update" parameterType="io.renren.vas.entity.ScJsrsjEntity">
+		insert into sc_jsrsj
+		(
+			xm, 
+			sfzmhm, 
+			csrq, 
+			djzsxxdz, 
+			djzsxzqh, 
+			dataid
+		)
+		values
+		(
+			#{xm}, 
+			#{sfzmhm}, 
+			'${csrq}', 
+			#{djzsxxdz}, 
+			#{djzsxzqh}, 
+			(select coalesce(max(dataid),0)+1 from sc_jsrsj)
+		)
+	</insert>
+	
+	<delete id="delete">
+		delete from sc_jsrsj where dataid = ${value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from sc_jsrsj where dataid in 
+		<foreach item="dataid" collection="array" open="(" separator="," close=")">
+			${dataid}
+		</foreach>
+	</delete>
+
+</mapper>

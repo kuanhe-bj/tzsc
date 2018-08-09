@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.vas.dao.ScGsdDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.renren.vas.entity.ScGsdEntity" id="scGsdMap">
+        <result property="id" column="id"/>
+        <result property="province" column="province"/>
+        <result property="percent" column="percent"/>
+        <result property="carnum" column="carnum"/>
+        <result property="city" column="city"/>
+    </resultMap>
+
+	<select id="queryObject" resultType="io.renren.vas.entity.ScGsdEntity">
+		select * from sc_gsd where id = #{value}
+	</select>
+
+	<select id="queryList" resultType="io.renren.vas.entity.ScGsdEntity">
+		select * from sc_gsd
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from sc_gsd 
+	</select>
+	 
+	<insert id="save" parameterType="io.renren.vas.entity.ScGsdEntity">
+		insert into sc_gsd
+		(
+			`id`, 
+			`province`, 
+			`percent`, 
+			`carnum`, 
+			`city`
+		)
+		values
+		(
+			#{id}, 
+			#{province}, 
+			#{percent}, 
+			#{carnum}, 
+			#{city}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="io.renren.vas.entity.ScGsdEntity">
+		update sc_gsd 
+		<set>
+			<if test="province != null">`province` = #{province}, </if>
+			<if test="percent != null">`percent` = #{percent}, </if>
+			<if test="carnum != null">`carnum` = #{carnum}, </if>
+			<if test="city != null">`city` = #{city}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from sc_gsd where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from sc_gsd where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

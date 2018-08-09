@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>车辆查询</title>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta
+	content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+	name="viewport">
+<link rel="stylesheet" href="../../css/bootstrap.min.css">
+<link rel="stylesheet" href="../../css/font-awesome.min.css">
+<link rel="stylesheet"
+	href="../../plugins/jqgrid/ui.jqgrid-bootstrap.css">
+<link rel="stylesheet"
+	href="../../plugins/ztree/css/metroStyle/metroStyle.css">
+<link rel="stylesheet" href="../../css/main.css">
+<script src="../../libs/jquery.min.js"></script>
+<script src="../../plugins/layer/layer.js"></script>
+<script src="../../libs/bootstrap.min.js"></script>
+<script src="../../libs/vue.min.js"></script>
+<script src="../../libs/validator.min.js"></script>
+<script src="../../plugins/jqgrid/grid.locale-cn.js"></script>
+<script src="../../plugins/jqgrid/jquery.jqGrid.min.js"></script>
+<script src="../../plugins/ztree/jquery.ztree.all.min.js"></script>
+<script src="../../js/common.js"></script>
+<script src="../../libs/router.js"></script>
+<style type="text/css">
+.kuandu {
+	width: 190px;
+}
+</style>
+</head>
+<body>
+	<div id="rrapp" v-cloak>
+		<div v-show="showList">
+			<div class="grid-btn" style="overflow: hidden;">
+				<div class="form-group col-sm-2 kuandu">
+					<input type="text" class="form-control" id="cph" v-model="q.cph"
+						@keyup.enter="query" placeholder="车牌号">
+
+				</div>
+				<!-- 			<div class="form-group col-sm-2 kuandu" > -->
+				<!-- 				<select id="brand" class="moreChoose" style="width:160px;"> -->
+				<!-- 			 		<option value ="">车辆品牌</option> -->
+				<!-- 			     </select> -->
+				<!-- 			</div> -->
+				<!-- 			<div class="form-group col-sm-2 kuandu" > -->
+				<!-- 				<input type="text" class="form-control" id="qclass" v-model="q.qclass" @keyup.enter="query" placeholder="车辆类型"> -->
+				<!-- 			</div> -->
+				<!-- 			<div class="form-group col-sm-2 kuandu" > -->
+				<!-- 				<input type="text" class="form-control" id="pclass" v-model="q.pclass" @keyup.enter="query" placeholder="车牌种类"> -->
+				<!-- 			</div> -->
+				<!-- 			<div class="form-group col-sm-2 kuandu" > -->
+				<!-- 				<input type="text" class="form-control" id="numOfPassenger" v-model="q.numOfPassenger" @keyup.enter="query" placeholder="乘客人数（以上）"> -->
+				<!-- 			</div> -->
+				<div class="form-group col-sm-2 kuandu">
+					<input type="text" class="form-control" id="startTime"
+						readonly="readonly" placeholder="起始时间">
+				</div>
+				<div class="form-group col-sm-2 kuandu">
+					<input type="text" class="form-control" id="endTime"
+						readonly="readonly" placeholder="结束时间">
+				</div>
+				<!-- 			<div class="form-group col-sm-2 kuandu"> -->
+				<!-- 				<input type="text" class="form-control" id="speed" v-model="q.speed" @keyup.enter="query" placeholder="行车速度(km/h)以上"> -->
+				<!-- 			</div> -->
+				<!-- 			<div class="form-group col-sm-2 kuandu" > -->
+				<!-- 				 <select id="color" class="moreChoose" style="width:160px;"> -->
+				<!-- 			 		<option value ="">车辆颜色</option> -->
+				<!-- 			     </select> -->
+				<!-- 			</div> -->
+				<!-- 		    <div class="form-group col-sm-2 kuandu" > -->
+				<!-- 				 <select id="paltecolor" class="moreChoose" style="width:160px;"> -->
+				<!-- 			 		<option value ="">车牌颜色</option> -->
+				<!-- 			 		<option value ="1">黑色</option> -->
+				<!-- 			 		<option value ="2">白色</option> -->
+				<!-- 			 		<option value ="6">黄色</option> -->
+				<!-- 			 		<option value ="5">蓝色</option> -->
+				<!-- 			 		<option value ="9">绿色</option> -->
+				<!-- 			     </select> -->
+				<!-- 			</div> -->
+				<!-- 			<div class="form-group col-sm-2 kuandu" > -->
+				<!-- 			     <select id="infoKind" class="moreChoose" style="width:160px;"> -->
+				<!-- 			        <option value ="">信息类型</option> -->
+				<!--                     <option value ="2">人工采集</option> -->
+				<!--                     <option value ="1">自动采集</option> -->
+				<!--                     <option value ="0">其他</option> -->
+				<!--                  </select> -->
+				<!-- 			</div> -->
+				<!-- 			<div class="form-group col-sm-2 kuandu" > -->
+				<!-- 			       <select id="safetyBelt" class="moreChoose" style="width:160px;"> -->
+				<!--                     <option value ="">安全带状态</option> -->
+				<!--                     <option value ="0">未系</option> -->
+				<!--                     <option value ="1">有系</option> -->
+				<!--                  </select> -->
+				<!-- 			</div> -->
+				<!-- 			<div class="form-group col-sm-2 kuandu" > -->
+				<!-- 			       <select id="calling" class="moreChoose" style="width:160px;"> -->
+				<!--                     <option value ="">打电话状态</option> -->
+				<!--                     <option value ="1">打电话中</option> -->
+				<!--                     <option value ="0">未打电话</option> -->
+				<!--                  </select> -->
+				<!-- 			</div> -->
+				<a class="btn btn-default"
+					style="background: #337ab7; color: #fff; margin-left: 15px; float: left;"
+					@click="query" id="che">查询</a>
+
+			</div>
+			<table id="jqGrid"></table>
+			<div id="jqGridPager"></div>
+		</div>
+	</div>
+	<script src="../../js/modules/manager/sckkfast.js"></script>
+	<script src="../../vasMap/laydate-master/dist/laydate.js"></script>
+	<script language="javascript" type="text/javascript">
+		$(function() {
+			//  轨迹回放
+			$("#back").click(
+					function() {
+						var carNum = $(this).val("data");
+						//  开始时间
+						var startTime = $("#startTime").val();
+						//  结束时间
+						var endTime = $("#endTime").val();
+						parent.sayhello("vasMap/views/scguijitu.html", carNum,
+								startTime, endTime);
+					});
+			var chepai = parent.cph;
+			if (chepai != null && chepai != "") {
+				document.getElementById('cph').value = chepai;
+				vm.query();
+			};
+			parent.change();
+			if (qs == "" || qs == null) {
+				t1 = getDate(0);
+				t2 = getBeforeDate(0);
+				laydate.render({
+					elem : '#startTime',
+					value : t1,
+					type : 'datetime'
+				});
+				laydate.render({
+					elem : '#endTime',
+					value : t2,
+					type : 'datetime'
+				});
+			} else {
+				laydate.render({
+					elem : '#startTime',
+					value : qs,
+					type : 'datetime'
+				});
+				laydate.render({
+					elem : '#endTime',
+					value : js,
+					type : 'datetime'
+				});
+			}
+		});
+	</script>
+</body>
+</html>

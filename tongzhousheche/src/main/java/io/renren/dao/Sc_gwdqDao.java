@@ -1,0 +1,78 @@
+package io.renren.dao;
+
+
+import java.util.List;
+import java.util.Map;
+
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
+
+import io.renren.modules.sys.dao.BaseDao;
+import io.renren.vo.DtcldzdansVo;
+
+/**
+ * 
+ * 
+ * @author pwk
+ * @email sunlightcs@gmail.com
+ * @date 2018-02-26 11:56:26
+ */
+@Mapper
+public interface Sc_gwdqDao extends BaseDao<DtcldzdansVo> {
+	 @Select("<script>SELECT plate,owner,color,model,brand,highrisk FROM sc_dtcldzdan \n" + 
+		 		"		<where>\n" + 
+		 		"			<if test=\"plate != null and plate != ''\">\n" + 
+		 		"				AND sc_dtcldzdan.plate  = #{plate}\n" + 
+		 		"			</if>\n" + 
+		 		"		 	<if test=\"plate == null\">\n" + 
+		 		"				\n" + 
+		 		"			</if>\n" + 
+		 		"		</where>\n" + 
+		 		"		   <choose>\n" + 
+		 		"            <when test=\"sidx != null and sidx.trim() != ''\">\n" + 
+		 		"                order by ${sidx} ${order}\n" + 
+		 		"            </when>\n" + 
+		 		"			<otherwise>\n" + 
+		 		"               order by highrisk desc\n" + 
+		 		"			</otherwise>\n" + 
+		 		"        </choose>\n" + 
+		 		"		<if test=\"offset != null and limit != null\">\n" + 
+		 		"			limit #{limit} offset #{offset}\n" + 
+		 		"		</if></script>")
+		List<DtcldzdansVo> queryList(Map<String, Object> map);
+		
+		@Select("<script>\r\n" + 
+		 		"select count(id) from sc_dtcldzdan\r\n" + 
+		 		"<where>\r\n" +
+		 		"<if test=\"plate != NULL and plate != ''\">\r\n" + 
+		 		"	AND sc_dtcldzdan.plate = #{plate}\r\n" + 
+		 		"</if>\r\n" + 
+		 		"</where>\r\n" + 
+		 		"</script>")
+		int queryTotal(Map<String, Object> map);
+				
+		@Update("UPDATE sc_dtcldzdan SET highrisk = 0 WHERE plate LIKE '%${_parameter}%'")
+		void update0(String zone);
+		
+		@Update("UPDATE sc_dtcldzdan SET highrisk = 10 WHERE plate LIKE '%${_parameter}%'")
+		void update10(String zone);
+		
+		@Update("UPDATE sc_dtcldzdan SET highrisk = 20 WHERE plate LIKE '%${_parameter}%'")
+		void update20(String zone);
+		
+		@Update("UPDATE sc_dtcldzdan SET highrisk = 30 WHERE plate LIKE '%${_parameter}%'")
+		void update30(String zone);
+		
+		@Update("UPDATE sc_dtcldzdan SET highrisk = 40 WHERE plate LIKE '%${_parameter}%'")
+		void update40(String zone);
+		
+		@Update("UPDATE sc_dtcldzdan SET highrisk = 50 WHERE plate LIKE '%${_parameter}%'")
+		void update50(String zone);
+		
+		@Update("UPDATE sc_dtcldzdan SET highrisk = 80 WHERE plate LIKE '%${_parameter}%'")
+		void update80(String zone);
+		
+		@Update("UPDATE sc_dtcldzdan SET highrisk = 90 WHERE plate LIKE '%${_parameter}%'")
+		void update90(String zone);
+}

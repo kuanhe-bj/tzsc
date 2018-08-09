@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title></title>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta
+	content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+	name="viewport">
+<link rel="stylesheet" href="../../css/bootstrap.min.css">
+<link rel="stylesheet" href="../../css/font-awesome.min.css">
+<link rel="stylesheet"
+	href="../../plugins/jqgrid/ui.jqgrid-bootstrap.css">
+<link rel="stylesheet"
+	href="../../plugins/ztree/css/metroStyle/metroStyle.css">
+<link rel="stylesheet" href="../../css/main.css">
+<script src="../../libs/jquery.min.js"></script>
+<script src="../../plugins/layer/layer.js"></script>
+<script src="../../libs/bootstrap.min.js"></script>
+<script src="../../libs/vue.min.js"></script>
+<script src="../../plugins/jqgrid/grid.locale-cn.js"></script>
+<script src="../../plugins/jqgrid/jquery.jqGrid.min.js"></script>
+<script src="../../plugins/ztree/jquery.ztree.all.min.js"></script>
+<script src="../../js/common.js"></script>
+ <style type ="text/css">
+ .grid-btn{
+   margin-bottom: 35px;
+ }
+ 
+ </style>
+</head>
+<body>
+	<div id="rrapp" v-cloak>
+		<div>
+			<div class="grid-btn">
+				<div class="form-group col-sm-2">
+					<input type="text" class="form-control" id="cph" 
+						placeholder="车牌号" onblur="check()"/>
+				</div>
+				<div class="form-group col-sm-2">
+					<input type="text" class="form-control" id="startTime"
+						placeholder="起始时间  请选择日期" onblur="SetQssj(this.value)"/>
+				</div>
+				<div class="form-group col-sm-2">
+					<input type="text" class="form-control" id="endTime"
+						placeholder="结束时间  请选择日期" onblur="SetJssj(this.value)"/>
+				</div>
+				<div class="form-group col-sm-2">
+					<input type="text" class="form-control" id="num"
+						placeholder="伴随次数 (（默认为2）)"  />
+				</div>
+				<div class="form-group col-sm-2">
+					<input type="text" class="form-control" id="time"
+						placeholder="伴随时间(分钟（默认为10）)"  />
+				</div>
+				<div class="form-group col-sm-2">
+					<input id="receiver" type="text" class="form-control" placeholder="目标用户" />
+				</div> 
+				<button style="margin-left:12px;" class="btn btn-primary" @click="alarm">推送按钮</button>
+				<a id="show" class="btn btn-primary" @click="find">伴随分析</a>
+<!-- 				<span id="msg"></span><br/>  -->
+<!-- 				<audio id="audio" src="../../images/main/13.wav"></audio> -->
+<!-- 				<input v-show="show" style="width:36px; height:36px;" type="image" src="../../images/main/HhCu-fynhhay5046228.gif" /> -->
+			</div>
+			<table id="jqGrid"></table>
+			<div id="jqGridPager"></div>
+		</div>
+	</div>
+
+	<script src="../../js/modules/generator/sc_kkbsxx.js"></script>
+	<script src="../../vasMap/laydate-master/dist/laydate.js"></script>
+	<script type="text/javascript">
+	function getNowFormatDate() {
+		var date = new Date();
+		var seperator1 = "-";
+		var year = date.getFullYear();
+		var month = date.getMonth() + 1;
+		var strDate = date.getDate();
+		if (month >= 1 && month <= 9) {
+			month = "0" + month;
+		}
+		if (strDate >= 0 && strDate <= 9) {
+			strDate = "0" + strDate;
+		}
+		var currentdate = year + seperator1 + month + seperator1 + strDate;
+		return currentdate;
+	}
+
+	function get7DaysBefore(date) {
+		var date = date || new Date(), timestamp, newDate;
+		if (!(date instanceof Date)) {
+			date = new Date(date.replace(/-/g, '-'));
+		}
+		timestamp = date.getTime();
+		newDate = new Date(timestamp - 7 * 24 * 3600 * 1000);
+		var month = newDate.getMonth() + 1;
+		if (month >= 1 && month <= 9) {
+			month = "0" + month;
+		}
+		var date = newDate.getDate();
+		if (date >= 0 && date <= 9) {
+			date = "0" + date;
+		}
+		// console.log(month);
+		return [ [ newDate.getFullYear(), month, date ].join('-') ].join(' ');
+	}
+
+	var time = getNowFormatDate();
+	var date = get7DaysBefore(time);
+	
+	laydate.render({
+		elem : '#startTime',
+		//value : date,
+		type : 'date'
+	});
+
+	laydate.render({
+		elem : '#endTime',
+		//value : time,
+		type : 'date'
+	});
+	function SetQssj(date) {
+		//console.log(date);
+		var qssj = $('#startTime').val(date);
+	}
+	function SetJssj(time) {
+		var jssj = $('#endTime').val(time);
+	}
+	</script>
+
+</body>
+
+</html>

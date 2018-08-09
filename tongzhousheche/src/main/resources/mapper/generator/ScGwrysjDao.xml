@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.vas.dao.ScGwrysjDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.renren.vas.entity.ScGwrysjEntity" id="scGwrysjMap">
+        <result property="drybh" column="DRYBH"/>
+        <result property="xm" column="XM"/>
+        <result property="xb" column="XB"/>
+        <result property="csrq" column="CSRQ"/>
+        <result property="sfzh" column="SFZH"/>
+        <result property="hjdqh" column="HJDQH"/>
+        <result property="hjdxz" column="HJDXZ"/>
+        <result property="xzdqh" column="XZDQH"/>
+        <result property="xzdxz" column="XZDXZ"/>
+    </resultMap>
+
+	<select id="queryObject" resultType="io.renren.vas.entity.ScGwrysjEntity">
+		select * from sc_gwrysj where drybh = #{value}  
+	</select>
+
+	<select id="queryList" resultType="io.renren.vas.entity.ScGwrysjEntity">
+		select * from sc_gwrysj
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by drybh desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit  #{limit} offset #{offset}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from sc_gwrysj 
+	</select>
+	 
+	<insert id="save" parameterType="io.renren.vas.entity.ScGwrysjEntity">
+		insert into sc_gwrysj
+		(
+			id,
+			drybh, 
+			xm, 
+			xb, 
+			csrq, 
+			sfzh, 
+			hjdqh, 
+			hjdxz, 
+			xzdqh, 
+			xzdxz
+		)
+		values
+		(
+			(SELECT MAX(id)+1 FROM sc_gwrysj), 
+			#{drybh}, 
+			#{xm}, 
+			${xb}, 
+			'${csrq}', 
+			#{sfzh}, 
+			#{hjdqh}, 
+			#{hjdxz}, 
+			#{xzdqh}, 
+			#{xzdxz}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="io.renren.vas.entity.ScGwrysjEntity">
+		update sc_gwrysj 
+		<set>
+			<if test="drybh != null">drybh = #{drybh}, </if>
+			<if test="xm != null">xm = #{xm}, </if>
+			<if test="xb != null">xb = ${xb}, </if>
+			<if test="csrq != null">csrq = '${csrq}', </if>
+			<if test="sfzh != null">sfzh = #{sfzh}, </if>
+			<if test="hjdqh != null">hjdqh = #{hjdqh}, </if>
+			<if test="hjdxz != null">hjdxz = #{hjdxz}, </if>
+			<if test="xzdqh != null">xzdqh = #{xzdqh}, </if>
+			<if test="xzdxz != null">xzdxz = #{xzdxz}</if>
+		</set>
+		where id = ${id}
+	</update>
+	
+	<delete id="delete">
+		delete from sc_gwrysj where DRYBH = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from sc_gwrysj where DRYBH in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{drybh}
+		</foreach>
+	</delete>
+
+</mapper>

@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+	<link rel="stylesheet" href="../../css/bootstrap.min.css">
+	<link rel="stylesheet" href="../../css/font-awesome.min.css">
+	<link rel="stylesheet" href="../../plugins/jqgrid/ui.jqgrid-bootstrap.css">
+	<link rel="stylesheet" href="../../plugins/ztree/css/metroStyle/metroStyle.css">
+	<link rel="stylesheet" href="../../css/main.css">
+	<script src="../../libs/jquery.min.js"></script>
+	<script src="../../plugins/layer/layer.js"></script>
+	<script src="../../libs/bootstrap.min.js"></script>
+	<script src="../../libs/vue.min.js"></script>
+	<script src="../../plugins/jqgrid/grid.locale-cn.js"></script>
+	<script src="../../plugins/jqgrid/jquery.jqGrid.min.js"></script>
+	<script src="../../plugins/ztree/jquery.ztree.all.min.js"></script>
+	<script src="../../js/common.js"></script>
+</head>
+<body>
+<div id="rrapp" v-cloak>
+	<div v-show="showList">
+		<div class="grid-btn">
+			<a v-if="hasPermission('generator:scdtcldzdan:save')" class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
+			<a v-if="hasPermission('generator:scdtcldzdan:update')" class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
+			<a v-if="hasPermission('generator:scdtcldzdan:delete')" class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+		</div>
+		<table id="jqGrid"></table>
+		<div id="jqGridPager"></div>
+	</div>
+
+	<div v-show="!showList" class="panel panel-default">
+		<div class="panel-heading">{{title}}</div>
+		<form class="form-horizontal">
+			<div class="form-group">
+				<div class="col-sm-2 control-label">车牌号</div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" v-model="scDtcldzdan.plate" placeholder="车牌号"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">车主姓名</div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" v-model="scDtcldzdan.owner" placeholder="车主姓名"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">车辆颜色</div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" v-model="scDtcldzdan.color" placeholder="车辆颜色"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">车辆品牌</div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" v-model="scDtcldzdan.brand" placeholder="车辆品牌"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">车辆型号</div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" v-model="scDtcldzdan.model" placeholder="车辆型号"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">出行异常指数</div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" v-model="scDtcldzdan.abnormal" placeholder="出行异常指数"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">违章异常指数</div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" v-model="scDtcldzdan.violation" placeholder="违章异常指数"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">昼伏夜出指数</div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" v-model="scDtcldzdan.nightout" placeholder="昼伏夜出指数"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">高危地区指数</div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" v-model="scDtcldzdan.highrisk" placeholder="高危地区指数"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">事故异常指数</div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" v-model="scDtcldzdan.accident" placeholder="事故异常指数"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">隐匿车辆指数</div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" v-model="scDtcldzdan.hidden" placeholder="隐匿车辆指数"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">假牌盗牌</div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" v-model="scDtcldzdan.isfake" placeholder="假牌盗牌"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">存疑车辆</div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" v-model="scDtcldzdan.isindoubt" placeholder="存疑车辆"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">是否涉案</div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" v-model="scDtcldzdan.isinvolved" placeholder="是否涉案"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">车主是否重点人</div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" v-model="scDtcldzdan.issuspects" placeholder="车主是否重点人"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">是否首次入城</div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" v-model="scDtcldzdan.isfirstin" placeholder="是否首次入城"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">次数异常分析</div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" v-model="scDtcldzdan.times" placeholder="次数异常分析"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">限行分析指数</div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" v-model="scDtcldzdan.limits" placeholder="限行分析指数"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">综合异常指数</div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" v-model="scDtcldzdan.summary" placeholder="综合异常指数"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">车辆有进无出</div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" v-model="scDtcldzdan.onlyenter" placeholder="车辆有进无出"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">频繁超速指数</div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" v-model="scDtcldzdan.overspeed" placeholder="频繁超速指数"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">连续违章指数</div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" v-model="scDtcldzdan.contviolation" placeholder="连续违章指数"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">异常轨迹指数</div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" v-model="scDtcldzdan.abtravel" placeholder="异常轨迹指数"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">重点区域徘徊指数</div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" v-model="scDtcldzdan.wander" placeholder="重点区域徘徊指数"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">电子围栏高危地区分析指数</div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" v-model="scDtcldzdan.efence" placeholder="电子围栏高危地区分析指数"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">套牌指数</div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" v-model="scDtcldzdan.multiplate" placeholder="套牌指数"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">身份证</div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" v-model="scDtcldzdan.sfz" placeholder="身份证"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label"></div>
+				<input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定"/>
+				&nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>
+			</div>
+		</form>
+	</div>
+</div>
+
+<script src="../../js/modules/generator/scdtcldzdan.js"></script>
+</body>
+</html>

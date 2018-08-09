@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title></title>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta
+	content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+	name="viewport">
+<link rel="stylesheet" href="../../css/bootstrap.min.css">
+<link rel="stylesheet" href="../../css/font-awesome.min.css">
+<link rel="stylesheet"
+	href="../../plugins/jqgrid/ui.jqgrid-bootstrap.css">
+<link rel="stylesheet"
+	href="../../plugins/ztree/css/metroStyle/metroStyle.css">
+<link rel="stylesheet" href="../../css/main.css">
+<script src="../../libs/jquery.min.js"></script>
+<script src="../../plugins/layer/layer.js"></script>
+<script src="../../libs/bootstrap.min.js"></script>
+<script src="../../libs/vue.min.js"></script>
+<script src="../../plugins/jqgrid/grid.locale-cn.js"></script>
+<script src="../../plugins/jqgrid/jquery.jqGrid.min.js"></script>
+<script src="../../plugins/ztree/jquery.ztree.all.min.js"></script>
+<script src="../../js/common.js"></script>
+<style type="text/css">
+#b {
+	margin-top: 80px;
+	position: relative;
+}
+
+#b1 {
+	position: relative;
+	background-color: #337ab7;
+	color:#fff;
+	left:30px;
+
+}
+
+#b2 {
+	position: relative;
+	background-color: #337ab7;
+	color:#fff;
+left:80px;
+	
+}
+#kb{
+width:280px;
+height:40px;
+}
+
+</style>
+</head>
+<body>
+	<div id="rrapp" v-cloak>
+		<div v-show="showList">
+			<div class="grid-btn">
+				<div class="form-group col-sm-2">
+					<input type="text" class="form-control" v-model="q.number"
+						@keyup.enter="query" placeholder="案件编号"   />
+				</div>
+				<div class="form-group col-sm-2">
+					<input type="text" class="form-control" v-model="q.name"
+						@keyup.enter="query" placeholder="案件名称" />
+				</div>
+				<div class="form-group col-sm-2" id="kb">
+				
+					
+				</div>
+				<div class="form-group col-sm-2" id="kb">
+					
+				</div>
+<!-- 				<div class="form-group col-sm-2"> -->
+<!-- 					<input type="text" class="form-control" v-model="q.qssj" -->
+<!-- 						id="qssj" @keyup.enter="query" placeholder="发案开始时间" /> -->
+<!-- 				</div> -->
+<!-- 				<div class="form-group col-sm-2"> -->
+<!-- 					<input type="text" class="form-control" v-model="q.jssj" -->
+<!-- 						id="jssj" @keyup.enter="query" placeholder="发案结束时间" /> -->
+<!-- 				</div> -->
+<!-- 				<div class="form-group col-sm-2"> -->
+<!-- 					<input type="text" class="form-control" v-model="q.ladw" -->
+<!-- 						@keyup.enter="query" placeholder="立案单位" /> -->
+<!-- 				</div> -->
+				<div class="form-group col-sm-2"> 
+					<input type="text" class="form-control" v-model="q.time"
+						@keyup.enter="query" placeholder="案发前后间隔时间(小时（默认为1）)"  id="t"/>
+				</div>
+				<div class="form-group col-sm-2">
+					<input type="text" class="form-control" v-model="q.fanwei" 
+						@keyup.enter="query" placeholder="案发地点左右范围(公里（默认为1）)"   id="f"/>
+				</div>
+			</div>
+
+
+
+		</div>
+		<div id="h">
+			<a id="b1" class="btn btn-default" @click="query">查询</a>
+			<a id="b2" class="btn btn-default" @click="qk">清空</a>
+
+		</div>
+		<div id="b">
+			<table id="jqGrid"></table>
+			<div id="jqGridPager"></div>
+		</div>
+	</div>
+	<script src="../../js/modules/generator/scsmajor2.js"></script>
+	<script src="../../vasMap/laydate-master/dist/laydate.js"></script>
+	<script>
+		laydate.render({
+			elem : '#qssj',
+			type : 'datetime'
+		});
+		laydate.render({
+			elem : '#jssj',
+			type : 'datetime'
+		});
+		//时间选择器
+//		laydate.render({
+//			elem : '#qssj',
+//			type : 'time'
+//		});
+	</script>
+</body>
+</html>

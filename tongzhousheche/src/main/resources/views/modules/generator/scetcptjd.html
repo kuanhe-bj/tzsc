@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title></title>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+<link rel="stylesheet" href="../../css/bootstrap.min.css">
+<link rel="stylesheet" href="../../css/font-awesome.min.css">
+<link rel="stylesheet" href="../../plugins/jqgrid/ui.jqgrid-bootstrap.css">
+<link rel="stylesheet" href="../../plugins/ztree/css/metroStyle/metroStyle.css">
+<link rel="stylesheet" href="../../css/main.css">
+<script src="../../libs/jquery.min.js"></script>
+<script src="../../plugins/layer/layer.js"></script>
+<script src="../../libs/bootstrap.min.js"></script>
+<script src="../../libs/vue.min.js"></script>
+<script src="../../plugins/jqgrid/grid.locale-cn.js"></script>
+<script src="../../plugins/jqgrid/jquery.jqGrid.min.js"></script>
+<script src="../../plugins/ztree/jquery.ztree.all.min.js"></script>
+<script src="../../js/common.js"></script>
+</head>
+<body>
+<div id="rrapp" v-cloak>
+	<div v-show="showList">
+		<div class="grid-btn">
+		<div class="form-group col-sm-2">
+				<input type="text" class="form-control" id="cph" v-model="q.cph" @keyup.enter="query" placeholder="车牌号">
+				
+			</div>
+			<div class="form-group col-sm-2">
+				
+				<input  type="text" class="form-control"  id="startTime" v-model="q.startTime" @keyup.enter="query" placeholder="起始时间 格式例：2018-08-08">
+				
+			</div>
+			<div class="form-group col-sm-2">
+				<input type="text" class="form-control" id="endTime" v-model="q.endTime" @keyup.enter="query" placeholder="结束时间 格式例：2018-08-08">
+			</div>
+			<a class="btn btn-default" @click="query" id="che">查询</a>
+			
+			<a class="btn btn-default"  style="background: blue;color:#fff;" id="back">行车轨迹</a>
+		
+		
+		</div>
+	    <table id="jqGrid"></table>
+	    <div id="jqGridPager"></div>
+    </div>
+</div>
+<script src="../../js/modules/generator/scetcptjd.js"></script>
+<script language="javascript" type="text/javascript">
+        $(function() {
+//             获取时间
+            function getBeforeDate(n){  
+                var n = n;  
+                var d = new Date();  
+                var year = d.getFullYear();  
+                var mon=d.getMonth()+1;  
+                var day=d.getDate();  
+                if(day <= n){  
+                        if(mon>1) {  
+                           mon=mon-1;  
+                        }  
+                       else {  
+                         year = year-1;  
+                         mon = 12;  
+                         }  
+                       }  
+                      d.setDate(d.getDate()-n);  
+                      year = d.getFullYear();  
+                      mon=d.getMonth()+1;  
+                      day=d.getDate();  
+                 s = year+"-"+(mon<10?('0'+mon):mon)+"-"+(day<10?('0'+day):day);  
+                 return s;  
+              }  
+//               轨迹回放
+        	$("#back").click(function () {
+        		 var carNum=$("#cph").val();
+//         		 开始时间
+        		 var startTime=$("#startTime").val();
+        		 if(startTime!=null&& startTime!="" ){
+        			 startTime=getBeforeDate(7);
+        		 };
+//         		 结束时间
+        		 var endTime=$("#endTime").val();
+        		 if(endTime!=null&& endTime!="" ){
+        			 endTime=getBeforeDate(0);
+        		 };
+        		 parent.sayhello("vasMap/views/scguijitu.html",carNum,startTime,endTime);
+        	});
+        	var chepai=parent.cph;
+        	if (chepai!=null&&chepai!="") {
+        		document.getElementById('cph').value=chepai;
+        		vm.query();
+        	};
+        	 parent.change();
+        });
+    </script>
+</body>
+</html>

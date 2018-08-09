@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ETCP热力图</title>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+<link rel="stylesheet" href="../../css/bootstrap.min.css">
+<link rel="stylesheet" href="../../css/font-awesome.min.css">
+<link rel="stylesheet" href="../../plugins/jqgrid/ui.jqgrid-bootstrap.css">
+<link rel="stylesheet" href="../../plugins/ztree/css/metroStyle/metroStyle.css">
+<link rel="stylesheet" href="../../css/main.css">
+<link href="../../vasMap/theme/default/google.css">
+<link href="../../vasMap/theme/default/style.css">
+<script src="../../libs/jquery.min.js"></script>
+<script src="../../plugins/layer/layer.js"></script>
+
+<script src="../../libs/vue.min.js"></script>
+<script src="../../libs/validator.min.js"></script>
+<script src="../../plugins/jqgrid/grid.locale-cn.js"></script>
+<script src="../../plugins/jqgrid/jquery.jqGrid.min.js"></script>
+<script src="../../plugins/ztree/jquery.ztree.all.min.js"></script>
+<script src="../../js/common.js"></script>
+<script src="../data/pInfo.js" type="text/javascript"></script>
+<script src="../superMap/SuperMap-8.1.1-14426.js" type="text/javascript"></script>
+<script src="../superMap/SuperMap_Plot-8.1.1-14426.js" type="text/javascript"></script>
+<script src="../js/tcc_screlitu.js" type="text/javascript"></script>
+</head>
+<body>
+<div id="rrapp" v-cloak style="position:absolute;top:0px;left:0px;right:0px;width:100%;height:50px;">
+	<div v-show="showList">
+		<div class="grid-btn">
+			<div class="form-group col-sm-2">
+				<input type="text" class="form-control" id="etcp" v-model="q.etcp" @keyup.enter="query" placeholder="ETCP">
+			</div>
+			<div class="form-group col-sm-2">
+				<input type="text" class="form-control" id="qssj" v-model="q.qssj" @keyup.enter="query" placeholder="起始时间" readonly="readonly">
+			</div>
+			<div class="form-group col-sm-2">
+				<input type="text" class="form-control" id="jssj" v-model="q.jssj" @keyup.enter="query" placeholder="结束时间" readonly="readonly">
+			</div>
+			<a class="btn btn-primary" @click="display">热力图</a>
+			<a class="btn btn-primary" @click="clear">清除</a>
+		</div>
+	    <table id="jqGrid"></table>
+	    <div id="jqGridPager"></div>
+    </div>
+</div>
+<!--地图显示的div-->
+<div id="xmap" style="position:absolute;top:50px;left:0px;right:0px;width:100%;height:100%;"></div> 
+<script src="../laydate-master/dist/laydate.js"></script>
+
+</body>
+</html>

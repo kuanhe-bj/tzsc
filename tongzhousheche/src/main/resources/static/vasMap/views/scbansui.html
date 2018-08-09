@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>车辆轨迹图</title>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta
+	content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+	name="viewport">
+<style type="text/css">
+body {
+	margin: 0;
+	overflow: hidden;
+	background: #fff;
+}
+
+#map {
+	position: relative;
+	height: 85vh;
+	border: 1px solid #3473b7;
+}
+
+#toolbar {
+	position: relative;
+	padding-top: 5px;
+	padding-bottom: 10px;
+}
+</style>
+<link rel="stylesheet" href="../../css/bootstrap.min.css">
+<link rel="stylesheet" href="../../css/font-awesome.min.css">
+<link rel="stylesheet"
+	href="../../plugins/jqgrid/ui.jqgrid-bootstrap.css">
+<link rel="stylesheet"
+	href="../../plugins/ztree/css/metroStyle/metroStyle.css">
+<link rel="stylesheet" href="../../css/main.css">
+<link href="../../vasMap/theme/default/google.css">
+<link href="../../vasMap/theme/default/style.css">
+
+<script src="../../libs/jquery.min.js"></script>
+<script src="../../plugins/layer/layer.js"></script>
+
+<script src="../../libs/vue.min.js"></script>
+<script src="../../libs/validator.min.js"></script>
+<script src="../../plugins/jqgrid/grid.locale-cn.js"></script>
+<script src="../../plugins/jqgrid/jquery.jqGrid.min.js"></script>
+<script src="../../plugins/ztree/jquery.ztree.all.min.js"></script>
+<script src="../../js/common.js"></script>
+<script src="../js/common.js"></script>
+<script src="../data/pInfo.js" type="text/javascript"></script>
+<script src="../superMap/SuperMap-8.1.1-14426.js" type="text/javascript"></script>
+<script src="../superMap/SuperMap_Plot-8.1.1-14426.js"
+	type="text/javascript"></script>
+<script type="text/javascript">
+	var host = document.location.toString().match(/file:\/\/ /) ? "http://localhost:8090"
+			: 'http://' + document.location.host;
+
+	var local, map,animatorLayer, animatorLayer2, layer, vectorLayer, markerLayer, drawPoint, select, nodeArray = [], pathTime, pathListIndex = 0, routeCompsIndex = 0, style = {
+		strokeColor : "#304DBE",
+		strokeWidth : 3,
+		pointerEvents : "visiblePainted",
+		fill : false
+	}, styleGuidePoint = {
+		pointRadius : 10,
+		externalGraphic : "../theme/images/car.png"
+	}, styleGuideLine = {
+		strokeColor : "#25FF25",
+		strokeWidth : 6,
+		fill : false
+	}, styleCar1 = {
+			externalGraphic : "../theme/images/car.gif",
+			allowRotate : true,
+			graphicWidth : 32,
+			graphicHeight : 32
+	},  styleCar2 = {
+			externalGraphic : "../theme/images/闪烁1.gif",
+			allowRotate : true,
+			graphicWidth : 32,
+			graphicHeight : 32
+		},styleLine = {
+		strokeColor : "#25FF25",
+		strokeWidth : 3,
+		fill : false
+	   }, styleCar1 = {
+		externalGraphic : "../theme/images/闪烁.gif",
+		allowRotate : true,
+		graphicWidth : 32,
+		graphicHeight : 32
+	},begin = {
+			externalGraphic : "../theme/images/marker.png",
+			graphicWidth : 25,
+			pointRadius : 10,
+			graphicHeight : 33
+	},start = {
+			externalGraphic : "../theme/images/start.png",
+			graphicWidth : 25,
+			pointRadius : 10,
+			graphicHeight : 33
+	},end = {
+			externalGraphic : "../theme/images/end.png",
+			graphicWidth : 25,
+			pointRadius : 10,
+			graphicHeight : 33
+	};
+	function init() {
+		data = GetRequest();
+		$('#cph11').html(data.c1List.split(",")[0]);
+		$('#cph22').html(data.c2List.split(",")[0]);
+		vectorLayer = new SuperMap.Layer.Vector("Vector Layer");
+		drawPoint = new SuperMap.Control.DrawFeature(vectorLayer,
+				SuperMap.Handler.Point);
+		select = new SuperMap.Control.SelectFeature(vectorLayer, {
+			onSelect : onFeatureSelect,
+			onUnselect : onFeatureUnselect
+		});
+		drawPoint.events.on({
+			"featureadded" : drawCompleted
+		});
+		map = new SuperMap.Map("map", {
+			controls : [ new SuperMap.Control.LayerSwitcher(),
+					new SuperMap.Control.Zoom(),
+					new SuperMap.Control.Navigation({
+						dragPanOptions : {
+							enableKinetic : true
+						}
+					}), drawPoint, select ],
+			units : "m"
+		});
+		layer = new SuperMap.Layer.TiledDynamicRESTLayer("通州矢量地图 ", url1, {
+			transparent : true,
+			cacheEnabled : true
+		}, {
+			maxResolution : "auto"
+		});
+		layer.events.on({
+			"layerInitialized" : addLayer
+		});
+		// 增加轨迹图层
+		vectorLayer = new SuperMap.Layer.Vector("VectorLayer", {
+	        renderers : [ "Canvas2" ],
+	        styleMap : new SuperMap.StyleMap({
+				"default" : styleLine
+			})
+	    }); 
+		//初始化动态图层start
+		animatorLayer = new SuperMap.Layer.AnimatorVector("Car1", {
+			styleMap : new SuperMap.StyleMap({
+				"default" : styleCar1
+			})
+		}, {
+			//设置速度为每帧播放0.005小时的数据
+			speed : 0.005,
+			//开始时间为0晨
+			startTime : 0.5,
+			//结束时间设置为最后运行结束的汽车结束时间
+			endTime : 1000
+		});
+		animatorLayer2 = new SuperMap.Layer.AnimatorVector("Car2", {
+			styleMap : new SuperMap.StyleMap({
+				"default" : styleCar2
+			})
+		}, {
+			speed : 0.005,
+			startTime : 0,
+			endTime : 1000
+		});
+		//初始化动态图层end	
+		markerLayer = new SuperMap.Layer.Markers("Markers");
+		guiji();
+	}
+	// 对url参数进行解析
+	function GetRequest() {
+		var urlstr = decodeURI(decodeURI(location.search)); // 获取url"符后的字
+		var theRequest = new Object();
+		if (urlstr.indexOf("?") != -1) {
+			var str = urlstr.substr(1);
+			strs = str.split("&");
+			for (var i = 0; i < strs.length; i++) {
+				theRequest[strs[i].split("=")[0]] = unescape(strs[i].split("=")[1]);
+			}
+		}
+		return theRequest;
+	}
+	function addLayer() {
+		map.addLayers([ layer, vectorLayer ,animatorLayer,animatorLayer2, markerLayer ]);
+		map.setCenter(new SuperMap.LonLat(116.65135585, 39.8989926), 12);
+		var callbacks = {
+				click : function(features) {
+					for (var k = 0; k < nodeArray.length; k++) {
+						if (nodeArray[k].x == features.geometry.x) {
+							closeInfoWin();
+							var contentHTML = "<div style=\'font-size:.8em; opacity: 0.8; overflow-y:hidden;\'>";
+				 			contentHTML += "<div>" + cph1+":" + time1[k]+ "</div>";
+				 			contentHTML += "<div>" + cph2+":" + time2[k]+ "</div>";
+							contentHTML += "<div>"+adress[k]+"</div></div>";
+							var popup = new SuperMap.Popup.FramedCloud("popwin",
+									new SuperMap.LonLat(features.geometry.x,
+											features.geometry.y), null,
+									contentHTML, null, true);
+							infowin = popup;
+							map.addPopup(popup);
+						}
+					}
+				}
+			};
+
+			//实例化 selectFeature 控件
+			var selectFeature = new SuperMap.Control.SelectFeature(vectorLayer, {
+				callbacks : callbacks
+			});
+			//map上添加控件
+			map.addControl(selectFeature);
+			//激活控件
+			selectFeature.activate();
+	}
+	function selectPoints() {
+		clearElements();
+		drawPoint.activate();
+	}
+	function drawCompleted(drawGeometryArgs) {
+		var point = drawGeometryArgs.feature.geometry, size = new SuperMap.Size(
+				44, 33), offset = new SuperMap.Pixel(-(size.w / 2), -size.h), icon = new SuperMap.Icon(
+				"../theme/images/marker.png", size, offset);
+		markerLayer.addMarker(new SuperMap.Marker(new SuperMap.LonLat(point.x,
+				point.y), icon));
+		nodeArray.push(point);
+	}
+
+	//选中时显示路径指引信息
+	function onFeatureSelect(feature) {
+		if (feature.attributes.description) {
+			popup = new SuperMap.Popup("chicken", feature.geometry.getBounds()
+					.getCenterLonLat(), new SuperMap.Size(200, 30),
+					"<div style='font-size:.8em; opacity: 0.8'>"
+							+ feature.attributes.description + "</div>", null,
+					false);
+			feature.popup = popup;
+			map.addPopup(popup);
+		}
+		if (feature.geometry.CLASS_NAME != "SuperMap.Geometry.Point") {
+			feature.style = styleGuideLine;
+			vectorLayer.redraw();
+		}
+	}
+
+	//清除要素时调用此函数
+	function onFeatureUnselect(feature) {
+		map.removePopup(feature.popup);
+		feature.popup.destroy();
+		feature.popup = null;
+		if (feature.geometry.CLASS_NAME != "SuperMap.Geometry.Point") {
+			feature.style = style;
+		}
+		vectorLayer.redraw();
+
+	}
+
+	function findPath(nodeArray) {
+// 		drawPoint.deactivate();
+		var findPathService, paramete, resultSetting;
+		resultSetting = new SuperMap.REST.TransportationAnalystResultSetting({
+			returnEdgeFeatures : true,
+			returnEdgeGeometry : true,
+			returnEdgeIDs : true,
+			returnNodeFeatures : true,
+			returnNodeGeometry : true,
+			returnNodeIDs : true,
+			returnPathGuides : true,
+			returnRoutes : true
+		});
+		analystParameter = new SuperMap.REST.TransportationAnalystParameter({
+			resultSetting : resultSetting,
+			weightFieldName : "W_LENGTH"
+		});
+		parameter = new SuperMap.REST.FindPathParameters({
+			isAnalyzeById : false,
+			nodes : nodeArray,
+			hasLeastEdgeCount : false,
+			parameter : analystParameter
+		});
+
+		if (nodeArray.length <= 1) {
+			alert("点位少于2个，无法形成轨迹!");
+		}
+		findPathService = new SuperMap.REST.FindPathService(url2, {
+			eventListeners : {
+				"processCompleted" : processCompleted
+			}
+		});
+		
+		findPathService.processAsync(parameter);
+	}
+
+	function processCompleted(findPathEventArgs) {
+		var result = findPathEventArgs.result;
+		addRouteResult(result)
+// 		allScheme(result);
+	}
+
+	   var routeStyle = {
+		        strokeColor: "#304DBE",
+		        strokeWidth: 5,
+		        pointerEvents: "visiblePainted",
+		        fill: false
+		    };
+	   var pointTeam=[];
+	   function addRouteResult(result) {
+		   var pathGuideItems = result.pathList[pathListIndex].pathGuideItems;
+		   pointTeam.push(pathGuideItems);
+	 	   getAnimator(pointTeam);
+	       for (var i = 0; i < result.pathList.length; i++) {
+	           var c = result.pathList[i].route.components[0].components[0];
+	           var p1 = new SuperMap.Geometry.Point(c.x, c.y);
+	           for (var j = 1; j < result.pathList[i].route.components[0].components.length; j++) {
+	               c = result.pathList[i].route.components[0].components[j];
+	               var p2 = new SuperMap.Geometry.Point(c.x, c.y);
+	               var curLine = new SuperMap.Geometry.LinearRing([p1, p2]);
+	               var pathFeature = new SuperMap.Feature.Vector();
+	               pathFeature.geometry = curLine;
+	               pathFeature.style = routeStyle;
+	               vectorLayer.addFeatures(pathFeature);
+	               p1 = p2;
+	           }
+	       }
+	   }
+	function allScheme(result) {
+		if (pathListIndex < result.pathList.length) {
+			addPath(result);
+		} else {
+			pathListIndex = 0;
+			//线绘制完成后会绘制关于路径指引点的信息
+			addPathGuideItems(result);
+		}
+	}
+	//以动画效果显示分析结果
+	function addPath(result) {
+		if (routeCompsIndex < result.pathList[pathListIndex].route.components.length) {
+			var pathFeature = new SuperMap.Feature.Vector();
+			var points = [];
+			for (var k = 0; k < 2; k++) {
+				if (result.pathList[pathListIndex].route.components[routeCompsIndex+ k]) {
+					points.push(new SuperMap.Geometry.Point(
+									result.pathList[pathListIndex].route.components[routeCompsIndex
+											+ k].x,
+									result.pathList[pathListIndex].route.components[routeCompsIndex
+											+ k].y));
+				}
+              
+			}
+			var curLine = new SuperMap.Geometry.LinearRing(points);
+			pathFeature.geometry = curLine;
+			pathFeature.style = style;
+			vectorLayer.addFeatures(pathFeature);
+			//每隔0.001毫秒加载一条弧段
+			pathTime = setTimeout(function() {
+				addPath(result);
+			}, 0.001);
+			routeCompsIndex++;
+			
+		} else {
+			clearTimeout(pathTime);
+			routeCompsIndex = 0;
+			pathListIndex++;
+			allScheme(result);
+		}
+		
+	};
+  var zu;
+	function addPathGuideItems(result) {
+		vectorLayer.removeAllFeatures();
+		//显示每个pathGuideItem和对应的描述信息
+		for (var k = 0; k < result.pathList.length; k++) {
+			var pathGuideItems = result.pathList[pathListIndex].pathGuideItems, len = pathGuideItems.length;
+			zu=pathGuideItems;
+			getAnimator(zu);
+			for (var m = 0; m < len; m++) {
+				var guideFeature = new SuperMap.Feature.Vector();
+				guideFeature.geometry = pathGuideItems[m].geometry;
+				guideFeature.attributes = {
+					description : pathGuideItems[m].description
+				};
+				if (guideFeature.geometry.CLASS_NAME === "SuperMap.Geometry.Point") {
+					guideFeature.style = styleGuidePoint;
+				} else {
+					guideFeature.style = style;
+				}
+				vectorLayer.addFeatures(guideFeature);
+			}
+		}
+		select.activate();
+	}
+	function closeInfoWin() {// 关闭窗口
+		if (infowin) {
+			try {
+				infowin.hide();// 隐藏窗体对象
+				infowin.destroy();// 消毁窗体对象
+			} catch (e) {
+			}
+		}
+	}
+	function clearElements() {
+		pathListIndex = 0;
+		routeCompsIndex = 0;
+		nodeArray = [];
+		select.deactivate();
+		if (vectorLayer.selectedFeatures.length > 0) {
+			map.removePopup(vectorLayer.selectedFeatures[0].popup);
+		}
+		animatorLayer.removeAllFeatures();
+		animatorLayer2.removeAllFeatures();
+		vectorLayer.removeAllFeatures();
+		markerLayer.clearMarkers();
+	}
+	var cph1,cph2,infowin, latitude = [],adress = [], longitude = [],marker=[],time1=[],time2=[];
+	// 调用此方法发绘制轨迹
+	function guiji() {
+		 clearElements();
+		//var data = GetRequest();
+		var str1 = data.wList.split(",");
+		var str2 = data.jList.split(",");
+		var str3 = data.c1List.split(",");
+		var str4 = data.c2List.split(",");
+		var str5 = data.p1List.split(",");
+		var str6 = data.p2List.split(",");
+		var str7 = data.adress.split(",");
+		for (var i in str1) {
+			longitude[i] = str1[i];
+			latitude[i] = str2[i];
+			cph1 = str3[i];
+			cph2 = str4[i];
+			time1[i] = str5[i];
+			time2[i] = str6[i];
+			adress[i]=str7[i];
+			size = new SuperMap.Size(44, 33);
+// 		    offset = new SuperMap.Pixel(-(size.w / 2),-size.h),
+// 		    icon = new SuperMap.Icon("../theme/images/marker.png", size,offset);
+// 			marker[i]=new SuperMap.Marker(new SuperMap.LonLat(latitude[i],longitude[i]), icon);
+// 			markerLayer.addMarker(new SuperMap.Marker(new SuperMap.LonLat(latitude[i],longitude[i]), icon));
+			nodeArray.push(new SuperMap.Geometry.Point(latitude[i], longitude[i]));
+// 			marker[i].events.on({
+// 				   "click":openInfoWin,
+// 				   "scope": marker[i]
+// 				});
+			
+		};
+	  	for (var i = 0; i < nodeArray.length; i++) {
+    		if(i==0){
+    			var guideFeatur = new SuperMap.Feature.Vector();
+				guideFeatur.geometry = nodeArray[i];
+				guideFeatur.style = start;
+				vectorLayer.addFeatures(guideFeatur);
+    		}else if(i>0&&i==nodeArray.length-1){
+    			var guideFeatur = new SuperMap.Feature.Vector();
+				guideFeatur.geometry = nodeArray[i];
+				guideFeatur.style = end;
+				vectorLayer.addFeatures(guideFeatur);
+    			
+    		}else{
+    			var guideFeatur = new SuperMap.Feature.Vector();
+				guideFeatur.geometry = nodeArray[i];
+				guideFeatur.style = begin;
+				vectorLayer.addFeatures(guideFeatur);
+    		}
+			
+		}
+		findPath(nodeArray);
+// 		function openInfoWin() {
+// 			closeInfoWin();
+// 			var j=-1;
+// 			for (var i = 0; i < marker.length; i++) {
+// 				if(marker[i]==this){
+// 					j=i;
+// 				}
+// 			}
+// 			var contentHTML = "<div style=\'font-size:.8em; opacity: 0.8; overflow-y:hidden;\'>";
+// 			contentHTML += "<div>" + cph1+":" + time1[j]+ "</div>";
+// 			contentHTML += "<div>" + cph2+":" + time2[j]+ "</div></div>";
+// 			var popup = new SuperMap.Popup.FramedCloud("popwin",
+// 					new SuperMap.LonLat(latitude[j], longitude[j]), null,
+// 					contentHTML, null, true);
+// 			infowin = popup;
+// 			map.addPopup(popup);
+			
+// 		}
+	}
+	//加载动态图
+	function getAnimator(pointTeam) {
+		stopAnimator();
+		var findPathEventq = [],findPathEventArgs2 = [];
+		var j=0;
+		var zu=pointTeam[0];
+		//构建节点数据
+		for (var i = 0; i < zu.length; i++) {
+			var a=2*i;
+			console.info(zu[a]);
+			if(a<=(zu.length-1)&&zu[a].geometry.x && zu[a].geometry.y){
+				findPathEventq[j] = new SuperMap.Feature.Vector(new SuperMap.Geometry.Point(
+	 					zu[a].geometry.x, zu[a].geometry.y),{
+						FEATUREID : "point",//设置要素的id
+						TIME : j
+					});
+				findPathEventArgs2[j] = new SuperMap.Feature.Vector(new SuperMap.Geometry.Point(
+	 					zu[a].geometry.x, zu[a].geometry.y),{
+						FEATUREID : "point",//设置要素的id
+						TIME : j
+					});
+				j++;
+			}
+		}
+		var distance = 0;
+		var k;
+		for (var i = 0, k = 2*i ; i < zu.length; i++) {
+			if (zu[k+2].geometry) {
+				//获取坐标点
+				var dx = zu[k+2].geometry.x - zu[k].geometry.x;
+				var dy = zu[k+2].geometry.y - zu[k].geometry.y;
+				//计算两个坐标点之间的距离
+				distance += Math.pow((dx * dx + dy * dy), 0.5);
+			} 
+		}
+// 		计算汽车行驶速度parseFloat("1234");
+		var speed = animatorLayer.animator.getSpeed();
+		var endTime = distance / speed;
+		var moves = Math.abs(distance / speed);
+
+		//给animatorLayer图层添加数据	
+// 		animatorLayer.animator.setEndTime(endTime*10);
+// 		animatorLayer2.animator.setEndTime(endTime*10);
+		animatorLayer.animator.setSpeed(0.03);
+		animatorLayer2.animator.setSpeed(0.03);
+		animatorLayer.addFeatures(findPathEventq);
+		animatorLayer2.addFeatures(findPathEventArgs2);
+		animatorLayer.animator.start();
+		animatorLayer2.animator.start();
+	}  
+	//开始播放动画
+	function startAnimator() {
+		animatorLayer.animator.start();
+		animatorLayer2.animator.start();
+	}
+	//暂停播放动画
+	function pauseAnimator() {
+		animatorLayer.animator.pause();
+	}
+	//停止播放动画
+	function stopAnimator() {
+		animatorLayer.animator.stop();
+		animatorLayer2.animator.stop();
+	}
+	
+	var cphs = sessionStorage.getItem("cph");
+	var times = sessionStorage.getItem("time");
+	var nums = sessionStorage.getItem("num");
+	var starts = sessionStorage.getItem("start");
+	var ends = sessionStorage.getItem("end");
+	 sessionStorage.removeItem("cph");
+	 sessionStorage.removeItem("time");
+	 sessionStorage.removeItem("num");
+	 sessionStorage.removeItem("start");
+	 sessionStorage.removeItem("end");
+//		返回
+	function backup() {
+		sessionStorage.setItem("cph", cphs);
+		sessionStorage.setItem("time", times);
+		sessionStorage.setItem("num", nums);
+		sessionStorage.setItem("start", starts);
+		sessionStorage.setItem("end", ends);
+		window.history.back(-1);
+	}
+</script>
+</head>
+<body onload="init()">
+	<div id="toolbar">
+	    <input type="button" class="btn"style="background: #337ab7; color: #fff; margin-left: 15px; "value="返回" onclick="backup()" />
+		<input type="button" class="btn btn-primary" value="重复播放" onclick="guiji()"/>
+		<span><img src="../theme/images/闪烁.gif" style="width: 32px;height: 32px;"></span><span id="cph11"></span>
+		<span><img src="../theme/images/闪烁1.gif" style="width: 32px;height: 32px;"></span><span id="cph22"></span>
+		
+	    
+	</div>
+	<div id="map"></div>
+	
+</body>
+
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>动态车辆电子档案图</title>
+<style type="text/css">
+	#canvasDiv{
+		margin-left:200px;
+	}
+	
+</style>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta
+	content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+	name="viewport">
+<link rel="stylesheet" href="../../css/bootstrap.min.css">
+<link rel="stylesheet" href="../../css/font-awesome.min.css">
+<link rel="stylesheet"
+	href="../../plugins/jqgrid/ui.jqgrid-bootstrap.css">
+<link rel="stylesheet"
+	href="../../plugins/ztree/css/metroStyle/metroStyle.css">
+<link rel="stylesheet" href="../../css/main.css">
+<script src="../../libs/jquery.min.js"></script>
+<script src="../../plugins/layer/layer.js"></script>
+<script src="../../libs/bootstrap.min.js"></script>
+<script src="../../libs/vue.min.js"></script>
+<script src="../../plugins/jqgrid/grid.locale-cn.js"></script>
+<script src="../../plugins/jqgrid/jquery.jqGrid.min.js"></script>
+<script src="../../plugins/ztree/jquery.ztree.all.min.js"></script>
+<script src="../../js/common.js"></script>
+<script type="text/javascript" src="../../libs/jtopo-0.4.8-min.js"></script>
+<script type="text/javascript" src="../../libs/jtopo-min.js"></script>
+<script type="text/javascript" src="../../libs/ichart.1.2.min.js"></script> 
+
+</head>
+<body>
+
+	<div id="rrapp">
+		<div v-show="showList">
+			<div class="grid-btn">
+				<div class="form-group col-sm-2">
+					<input type="text" class="form-control" id="plate" v-model="q.plate"
+						placeholder="车牌号" onblur="check()">
+
+				</div>
+				
+				<a class="btn btn-primary" @click="query">查询</a>
+<!-- 				<button class="btn btn-warning" onclick="javascript:history.back(-1);">返回</button> -->
+				<a href="#" onClick="backup()">返回上一页</a>
+				<span id="msg"></span>
+			</div>
+			 
+		</div>
+	</div>              
+ </div>   
+ <canvas id="canvas" width="1330" height="800" style="border:1px solid #c3c3c3;"></canvas>  
+ <div id='canvasDiv' width='1330' height='700' style='border:1px solid #c3c3c3;'></div> 
+	<script src="../../js/modules/generator/sc_dtcldzdant.js"></script>	
+ 	<script type="text/javascript">  
+ 		function check() { 
+   			var plate = $("#plate").val(); 
+  			if(plate.length >= 10) { 
+   				$("#msg").css("color","red"); 
+   				$("#msg").html("输入长度不超过10个字符！"); 
+  			} else if(plate == ""){ 
+   				$("#msg").css("color","red"); 
+   				$("#msg").html("请输入车牌号！");	 
+  			}else{ 
+  				$("#msg").css("color","green"); 
+   				$("#msg").html("输入符合规范！"); 
+  			} 
+   		} 
+  		</script>  
+</body>
+</html>

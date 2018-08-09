@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.vas.dao.ETccDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.renren.vas.entity.ETccEntity" id="eTccMap">
+        <result property="eId" column="e_id"/>
+        <result property="eJingdu" column="e_jingdu"/>
+        <result property="eWeidu" column="e_weidu"/>
+        <result property="querytime" column="querytime"/>
+        <result property="count" column="count"/>
+        <result property="sjly" column="sjly"/>
+    </resultMap>
+
+	<select id="queryObject" resultType="io.renren.vas.entity.ETccEntity">
+		select * from e_tcc where e_id = #{value}
+	</select>
+
+	<select id="queryList" resultType="io.renren.vas.entity.ETccEntity">
+		select * from e_tcc
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by e_id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from e_tcc 
+	</select>
+	 
+	<insert id="save" parameterType="io.renren.vas.entity.ETccEntity">
+		insert into e_tcc
+		(
+			`e_id`, 
+			`e_jingdu`, 
+			`e_weidu`, 
+			`querytime`, 
+			`count`, 
+			`sjly`
+		)
+		values
+		(
+			#{eId}, 
+			#{eJingdu}, 
+			#{eWeidu}, 
+			#{querytime}, 
+			#{count}, 
+			#{sjly}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="io.renren.vas.entity.ETccEntity">
+		update e_tcc 
+		<set>
+			<if test="eJingdu != null">`e_jingdu` = #{eJingdu}, </if>
+			<if test="eWeidu != null">`e_weidu` = #{eWeidu}, </if>
+			<if test="querytime != null">`querytime` = #{querytime}, </if>
+			<if test="count != null">`count` = #{count}, </if>
+			<if test="sjly != null">`sjly` = #{sjly}</if>
+		</set>
+		where e_id = #{eId}
+	</update>
+	
+	<delete id="delete">
+		delete from e_tcc where e_id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from e_tcc where e_id in 
+		<foreach item="eId" collection="array" open="(" separator="," close=")">
+			#{eId}
+		</foreach>
+	</delete>
+
+</mapper>

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.vas.dao.ScJqDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.renren.vas.entity.ScJqEntity" id="scJqMap">
+        <result property="id" column="ID"/>
+        <result property="jcjbh" column="JCJBH"/>
+        <result property="asjfssj" column="ASJFSSJ"/>
+        <result property="asjjssj" column="ASJJSSJ"/>
+        <result property="asjfsddid" column="ASJFSDDID"/>
+        <result property="asjfsxz" column="ASJFSXZ"/>
+        <result property="fynr" column="FYNR"/>
+        <result property="sspcsid" column="SSPCSID"/>
+        <result property="asjlxid" column="ASJLXID"/>
+        <result property="cph" column="CPH"/>
+        <result property="barmc" column="BARMC"/>
+        <result property="badwmc" column="BADWMC"/>
+    </resultMap>
+
+	<select id="queryObject" resultType="io.renren.vas.entity.ScJqEntity">
+		select * from sc_jq where ID = #{value}
+	</select>
+
+	<select id="queryList" resultType="io.renren.vas.entity.ScJqEntity">
+		select * from sc_jq
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by ID desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{limit} offset #{offset}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from sc_jq 
+	</select>
+	 
+	<insert id="save" parameterType="io.renren.vas.entity.ScJqEntity">
+		insert into sc_jq
+		(
+			ID, 
+			JCJBH, 
+			ASJFSSJ, 
+			ASJJSSJ, 
+			ASJFSDDID, 
+			ASJFSXZ, 
+			FYNR, 
+			SSPCSID, 
+			ASJLXID, 
+			CPH, 
+			BARMC, 
+			BADWMC
+		)
+		values
+		(
+			#{id}, 
+			#{jcjbh}, 
+			#{asjfssj}, 
+			#{asjjssj}, 
+			#{asjfsddid}, 
+			#{asjfsxz}, 
+			#{fynr}, 
+			#{sspcsid}, 
+			#{asjlxid}, 
+			#{cph}, 
+			#{barmc}, 
+			#{badwmc}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="io.renren.vas.entity.ScJqEntity">
+		update sc_jq 
+		<set>
+			<if test="jcjbh != null">JCJBH = #{jcjbh}, </if>
+			<if test="asjfssj != null">ASJFSSJ = #{asjfssj}, </if>
+			<if test="asjjssj != null">ASJJSSJ = #{asjjssj}, </if>
+			<if test="asjfsddid != null">ASJFSDDID = #{asjfsddid}, </if>
+			<if test="asjfsxz != null">ASJFSXZ = #{asjfsxz}, </if>
+			<if test="fynr != null">FYNR = #{fynr}, </if>
+			<if test="sspcsid != null">SSPCSID = #{sspcsid}, </if>
+			<if test="asjlxid != null">ASJLXID = #{asjlxid}, </if>
+			<if test="cph != null">CPH = #{cph}, </if>
+			<if test="barmc != null">BARMC = #{barmc}, </if>
+			<if test="badwmc != null">BADWMC = #{badwmc}</if>
+		</set>
+		where ID =#{id}
+	</update>
+	
+	<delete id="delete">
+		delete from sc_jq where ID = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from sc_jq where ID in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

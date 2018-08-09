@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>车辆大数据分析系统</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="css/main.css">
+        <link href="resources/css/jquery-ui-themes.css" type="text/css" rel="stylesheet"/>        
+        <!-- 引入 ECharts 文件 -->
+        <script src="libs/echarts.min.js"></script>   
+        <script src="libs/bootstrap.min.js"></script>
+        <script src="js/china.js"></script>
+        <script src="resources/scripts/jquery-1.7.1.min.js"></script>
+        <script src="resources/scripts/jquery-ui-1.8.10.custom.min.js"></script>        
+        <link rel="stylesheet" href="plugins/jqgrid/ui.jqgrid-bootstrap.css">
+        <script src="plugins/jqgrid/grid.locale-cn.js"></script>
+        <script src="plugins/jqgrid/jquery.jqGrid.min.js"></script>
+        <script src="js/common.js"></script>
+        <script src="../vas/libs/vue.min.js"></script>
+        
+        <style type ="text/css">
+body {
+    background-color: #0d2f65;
+    color:#ffffff;
+}
+
+a {
+    color:#fff;
+}
+
+@media (min-width: 1440px)
+{
+    .container {
+        width: 1400px;
+    }
+}
+
+.blueborder {
+    background-color: #0f3054;
+    border:1px #264a7e solid;
+}
+
+.blueUnder{
+    border-bottom: 1px #264a7e solid;
+}
+
+.myTitle{
+    margin-left: 20%;
+    font-size: 28px;
+    font-weight: 900;
+    float: right;
+}
+
+.topRow{
+    margin-bottom: 15px;
+    /* margin-top: 20px; */
+   /* padding-bottom: 5px;
+    background: url(resources/images/title-line.png)no-repeat;
+    background-position: right;
+    bottom: auto;
+    background-size: contain; */
+}
+
+.col-lg-6 {
+ margin-top: 30px;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.whiteBack{
+    background-color: #0f3054;
+    padding-top: 10px;
+    color:#333;
+}
+
+.divPadding{
+    padding: 3px;
+}
+
+.row{
+	border-top:0;
+}
+.container {
+    width: 100vw;
+    height: 100vh;
+}
+.middle_btn{
+    background-color: #fff;
+    border: 1px #fff solid;
+    height: 4em;
+}
+.middle_r{
+ background: url(resources/images/middle.jpg) repeat-x 100% 100% ; 
+}
+.middle_r p{
+color:#555;
+    padding-top: 4px;
+    margin-bottom: 6px;
+}
+
+</style>
+       <style type="text/css">
+            *{margin:0;padding:0;}
+            ul,li{list-style:none;display:block;}
+            #tableInfo2{height:491px;background:#0f3054;overflow:hidden;}
+            #tableInfo2 #con1,#con2{width:380px;float:left;height:750px;}
+            #tableInfo2 li{height:15px;line-height:15px;text-align:left;margin-bottom:10px;}
+            #tableInfo{height:480px;background:#0f3054;overflow:hidden;}
+            #tableInfo #con3,#con4{width:520px;float:left;height:750px;}
+            #tableInfo li{height:15px;line-height:15px;text-align:left;margin-bottom:10px;}
+            .title-but{
+            width: 16%; height: 2em; 
+            line-height: 2em;text-align: center;display: inline-block; background: url(resources/images/title-btn.jpg)repeat-x 100% 100% ; 
+            }
+            .title-but:hover{
+            color:#fff;
+            text-decoration:none;
+            }
+  /* #total> .shuju{
+    color: #6cbef; border-bottom: 1px solid #6cbef;
+   }*/
+   .title-r {
+  background: url(resources/images/title-bg.png)no-repeat;
+  /*background: url(resources/images/title-line.png)no-repeat;*/
+    background-position: left bottom;
+    background-size: contain;
+   }
+   .numb-span{
+   margin-right:10px; width: 6%; height: 1.4em; line-height: 1.4em;
+   text-align: center;display: inline-block;background-color:#d07619;
+   margin:1%;
+   }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="row">
+
+            </div>
+            <div class ="row topRow blueUnder" id="rrapp" v-cloak style="width: 100%;padding-right: 2%;">
+                <div class="col-lg-5 col-md-6 col-sm-12">
+                    <div class="col-md-4">
+                        <img src="resources/images/logo-t.png">                        
+                    </div>
+                    <div class="col-md-8 myTitle">车辆大数据分析系统</div>
+                </div>
+                <div class="title-r col-lg-7 col-md-7 col-sm-12">
+                    <div style="text-align: right;padding-bottom: 20px;">
+                        <a class="title-but">雪亮工程链接</a>&nbsp;&nbsp;<a href="index.html">登录</a>
+                    </div>
+                    <div class="col-md-1 col-sm-6">
+                        <img src="resources/images/sheceh_06.png" width="40">
+                    </div>
+                    <div class="col-md-2 col-sm-6">
+                        <a href="#" onclick="window.open(baseURL+'modules/manager/sc_zfyc.html','_self');"><p>昼伏夜出<br><span style="color:#00adff; padding-right: 5%;">{{zfyc}}</span>辆</p></a>
+                    </div>
+                    <div class="col-md-1">
+                        <img src="resources/images/sheceh_08.png" width="40">
+                    </div>
+                    <div class="col-md-2 col-sm-6">
+                        <a href="#" onclick="window.open(baseURL+'modules/generator/sc_tpfx.html','_self');"><p>套牌嫌疑<br>
+                        <span style="color:#00adff; padding-right: 5%;">{{tpxy}}</span>辆
+                        </p></a>
+                    </div>
+                    <div class="col-md-1">
+                        <img src="resources/images/sheceh_10.png" width="40">
+                    </div>
+                    <div class="col-md-2 col-sm-6">
+                        <a href="#" onclick="window.open(baseURL+'modules/generator/sc_yncl.html','_self');"><p>隐匿车辆<br>
+                        <span style="color:#00adff; padding-right: 5%;">{{ymcl}}</span>辆</p></a>
+                    </div>
+                    <div class="col-md-1">
+                        <img src="resources/images/sheceh_12.png" width="40">
+                    </div>
+                    <div class="col-md-2 col-sm-6">
+                        <a href="#" onclick="window.open(baseURL+'modules/generator/sc_scrc.html','_self');"><p>首次进城<br>
+                        <span style="color:#00adff; padding-right: 5%;">{{scjc}}</span>辆</p></a>
+                    </div>                    
+                </div>
+            </div>
+                <div class="col-lg-6 col-md-6 col-sm-12 " >
+                    <div class="col-md-12">
+                        <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+                        <div id="carFromDiv" style="height: 550px" ></div>
+                    </div>               
+   
+    
+    
+                </div>
+                <div id="total" style="padding: 0 1%; margin-left:10px; width:223px;height: 580px;display: inline;float:left;background: #0f3054;">
+                	<p class="shuju" style="color: #6cbef; border-bottom: 1px solid #6cbef;"> 
+                	 <img style="padding-bottom: 1%;display: inline-block;width: 15px;height: 17px;" src="resources/images/sheceh_2.png" height="20px">
+                	实时数据</p>
+               		<div id="kk" class="blueborder" style="width: 196px;text-align:center;margin-top: 40px;height: 106px;line-height: 43px;background: #FFC125;">
+                	</div>
+                	<div id="tcc" class="blueborder" style="width: 196px;text-align:center;margin-top: 33px;height: 106px;line-height: 43px;background: #FF6A6A;">
+                	</div>
+                </div>
+                <div style="width: 400px;float: right;height: 580px;margin-right: 2%;background-color: #0f3054;">
+                    
+                    	<p style="color: #6cbef2; margin: 2%; border-bottom: 1px solid #6cbef2;"> <img style="padding-bottom: 1%;display: inline-block;width: 15px;height: 17px;" src="resources/images/sheceh_2.png" height="20px">
+                    	信息滚动</p>
+                    	<p style="margin-bottom: 10px;">
+                    	  <span style="margin-left: 10px;">车牌号</span><span style="margin-left: 94px;">时间</span><span style="margin-left: 87px;">来源</span>
+                    	</p>
+                    	<div id="tableInfo2">
+                    	   <ul id="con1"></ul>
+				           <ul id="con2"></ul>
+                    	</div>
+          
+                </div>
+            <div class="row" style="margin:10px;" id="rrapp2" v-cloak>
+                <div class="col-lg-6 col-md-6 col-sm-12 " >
+                    <div class="col-md-3 divPadding">
+                        <div class="col-sm-12 middle_btn" style="padding-top: 10px;">
+                        <div class="col-sm-3">
+                        <img src="resources/images/sheceh_19.png" height="30">
+                        </div>
+                        <div class="col-sm-9" style="text-align: right;color: #555;padding: 0;">
+                            <p>停车场数量<br>1115<img style=" width: 10px; height: 10px; margin-left: 4%;" src='resources/images/sheceh_4.png'></p>
+                        </div>
+                        </div>
+                    </div>
+                   <div class="col-md-3 divPadding">
+                        <div class="col-sm-12 middle_btn" style="padding-top: 10px;">
+                        <div class="col-sm-3">
+                       <img src="resources/images/sheceh_22.png" height="30">
+                        </div>
+                        <div class="col-sm-9" style="text-align: right;color: #555;padding: 0;">
+                            <p>停车数量<br>{{tcsl}}<img style="    width: 10px; height: 10px; margin-left: 4%;" src='resources/images/sheceh_4.png'></p>
+                        </div>
+                        </div>
+                    </div>  
+
+                     <div class="col-md-3 divPadding">
+                        <div class="col-sm-12 middle_btn" style="padding-top: 10px;">
+                        <div class="col-sm-3">
+                       <img src="resources/images/sheceh_22.png" height="30">
+                        </div>
+                        <div class="col-sm-9" style="text-align: right;color: #555;padding: 0;">
+                            <p>今日入场<br>{{jrrc}}<img style="    width: 10px; height: 10px; margin-left: 4%;" src='resources/images/sheceh_4.png'></p>
+                        </div>
+                        </div>
+                    </div>  
+                      <div class="col-md-3 divPadding">
+                        <div class="col-sm-12 middle_btn" style="padding-top: 10px;">
+                        <div class="col-sm-3">
+                      <img src="resources/images/sheceh_28.png" height="30">
+                        </div>
+                        <div class="col-sm-9" style="text-align: right;color: #555;padding: 0;">
+                             <p>今日出场<br>{{jrcc}}<img style="    width: 10px; height: 10px; margin-left: 4%;" src='resources/images/sheceh_4.png'></p>
+                        </div>
+                        </div>
+                    </div>  
+
+                                      
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-12 " >
+                    <div class="col-md-3 divPadding">
+                        <div class="col-sm-12 middle_r" style="padding-top: 10px;">
+                        <div style="text-align:center;">布控总量</div>
+                        <div style="text-align:center;width: 100%;">
+                            <p style="color: #555;">{{bkzl}}</p>
+                        </div>
+                        </div>
+                    </div> 
+                    <div class="col-md-3 divPadding">
+                        <div class="col-sm-12 middle_r" style="padding-top: 10px;">
+                        <div style="text-align:center;">
+                        今日布控
+                        </div>
+                        <div style="text-align:center;width: 100%;">
+                            <p>{{jrbk}}</p>
+                        </div>  
+                        </div>
+                    </div>
+                    <div class="col-md-3 divPadding">
+                        <div class="col-sm-12 middle_r" style="padding-top: 10px;">
+                        <div style="text-align:center;">
+                        累计报警
+                        </div>
+                        <div style="text-align:center;width: 100%;">
+                            <p>{{ljbj}}</p>
+                        </div>  
+                        </div>
+                    </div>
+                    <div class="col-md-3 divPadding">
+                        <div class="col-sm-12 middle_r" style="padding-top: 10px;">
+                        <div style="text-align:center;">
+                       今日报警
+                        </div>
+                        <div style="text-align:center;width: 100%;">
+                            <p>{{jrbj}}</p>
+                        </div>       
+                        </div>
+                    </div>                     
+                </div>                
+            </div>         
+                <div class="col-lg-6 col-md-6 col-sm-12" >
+                    <div class="col-md-12 blueborder" style="border: none;background: transparent;">
+                    	<p style="width: 9em;height: 2em;line-height: 2em;text-align: center;position: absolute;right: 2%;top: 2%;background: url(resources/images/map-titlle.png)no-repeat;background-position: left bottom;background-size: cover;">
+                    	<a href="vasMap/views/zhongdianquyu2.html">重点区域徘徊图</a></p>
+                		<iframe src="vasMap/views/zhongdianquyu2.html" style="height: 564px;width: 100%;"></iframe>
+                    </div>                
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-12" style="height: 582px;">
+                    <div class="col-md-12 blueborder" style="height: 567px;">
+                    	<p style="color: #6cbef2; margin: 2%; border-bottom: 1px solid #6cbef2;"><img style="padding-bottom: 1%;display: inline-block;width: 15px;height: 17px;" src="resources/images/sheceh_2.png" height="20px">
+                    	报警车辆列表</p>
+                    	<p style="margin-bottom: 10px;">
+                    	  <span style="margin-left: 10px;">车牌号</span><span style="margin-left: 94px;">时间</span><span style="margin-left: 87px;">地址</span><span style="margin-left: 181px;">徘徊次数</span>
+                    	</p>
+                    	<div id="tableInfo">
+                    	   <ul id="con3"></ul>
+				           <ul id="con4"></ul>
+                    	</div>
+                    </div>                
+                </div>
+            <div class="row" style="margin-top: 20px;margin-bottom: 20px;">
+                <div class="col-lg-12 col-md-12 col-sm-12 blueUnder"></div>
+            </div>  
+            <div class="row" style="margin-top: 20px;margin-bottom: 20px;">
+                <div class="col-lg-12 col-md-12 col-sm-12" style="text-align: center;">
+                    <p>技术支持：010-88188828</p>
+                </div>
+            </div>             
+        </div>
+        <script src="js/nightout.js"></script>
+<!--         <script src="js/carfrom.js"></script> -->
+<!--         <script src="js/limitout.js"></script> -->
+<!--         <script src="js/highrisk.js"></script> -->
+<!--      	 <script src="js/traffic.js"></script> -->
+        <script type="text/javascript">
+     
+    $(function() {
+    	vm.query();
+    	vm2.query();
+    	vm3.query();
+    	getInfo();
+    	getCarsph();
+    });
+   
+    
+    var vm = new Vue({
+    		el : '#rrapp',
+    		data : {
+    			zfyc : '',
+    			tpxy : '',
+    			ymcl : '',
+    			scjc : ''
+    		},
+    		methods : {
+    			query : function() {				
+    				$.ajax({
+    					type : "POST",
+    					url : baseURL + "main/query",
+    					contentType : "application/json",
+    					data : {},
+    					success : function(r) {
+    						vm.zfyc = r.page.zfyc;
+    						vm.tpxy = r.page.tpxy;
+    						vm.ymcl = r.page.ymcl;
+    						vm.scjc = r.page.scjc;
+    					}
+    				});
+    				setTimeout('vm.query()', 12000); 
+    			}
+    		}
+    	});
+    
+    var vm2 = new Vue({
+		el : '#rrapp2',
+		data : {	
+			tcsl:'',
+			jrrc:'',
+			jrcc:'',
+			bkzl:'',
+			jrbk:'',
+			ljbj:'',
+			jrbj:''
+		},
+		methods : {
+			query : function() {				
+				$.ajax({
+					type : "POST",
+					url : baseURL + "main/query",
+					contentType : "application/json",
+					data : {},
+					success : function(r) {
+						vm2.tcsl = r.page.tcsl;
+						vm2.jrrc = r.page.jrrc;
+						vm2.jrcc = r.page.jrcc;
+						vm2.bkzl = r.page.bkzl;
+						vm2.jrbk = r.page.jrbk;
+						vm2.ljbj = r.page.ljbj;
+						vm2.jrbj = r.page.jrbj;
+					}
+				});
+				setTimeout('vm2.query()', 10000); 
+			}
+		}
+	});
+    
+    var vm3 = new Vue({
+		el : '#total',
+		data : {	
+			kNum : '',
+			tNum : ''
+		},
+		methods : {
+			query : function() {				
+				$.ajax({
+					type : "POST",
+					url : baseURL + "main/total",
+					contentType : "application/json",
+					data : {},
+					success : function(r) {
+						$("#tcc").empty();
+						$("#kk").empty();
+						var str1 = r.page.kNum + "";
+						var length1 = GetLength(str1);
+						var kk = '<span>卡口车辆数(辆)</span><br/>';
+						$("#kk").append(kk);
+						for(var i = 0; i < length1; i++) {
+							var s = str1.substr(i,1);
+							var kk2 = '<span class="numb-span" >' + s + '</span>';
+							$("#kk").append(kk2);
+						}
+						
+						var str2 = r.page.tNum + "";
+						var length2 = GetLength(str2);
+						var tcc = '<span>停车场车辆数(辆)</span><br/>';
+						$("#tcc").append(tcc);
+						for(var i = 0; i < length2; i++) {
+							var s = str2.substr(i,1);
+							var tcc2 = '<span class="numb-span" >' + s + '</span>';
+							$("#tcc").append(tcc2);
+						}
+					}
+				});
+				setTimeout('vm3.query()', 5000); 
+			}
+		}
+	});
+    
+    
+    function GetLength(str) {
+    	var realLength = 0, len = str.length, charCode = -1;
+    	for (var i = 0; i < len; i++) {
+    		charCode = str.charCodeAt(i);
+    	    if (charCode >= 0 && charCode <= 128) 
+    	    	realLength += 1;
+    	    else
+    	       realLength += 2;
+    	}
+    	return realLength;
+    }
+    
+    function getInfo() {
+		$.ajax({
+			type : "POST",
+			url : baseURL + "main/getInfo",
+			contentType : "application/json",
+			data : {},
+			success : function(r) {
+				var list = r.page;
+				var st="";
+				$('#con1').html("");
+				if(list!=null){
+					for (var i = 0; i < list.length; i++) {
+						st+='<li><div style="margin-left:5px;width: 80px;float: left;">'+list[i].carNumber+"</div><span style='margin-left:20px;width: 100px;'>"+list[i].enterTime +"</span><span style='margin-left:20px;width: 67px;'>微卡口 </span>"+'</li>';
+					}	
+				}
+				$('#con1').html(st);
+			}
+		});
+		setTimeout('getInfo()', 30*1000); 
+    }
+    
+
+    
+    function getCarsph() {
+		$.ajax({
+			type : "POST",
+			url : baseURL + "main/getCarsph",
+			contentType : "application/json",
+			data : {},
+			success : function(r) {
+				var list = r.page;
+				var st="";
+				$('#con3').html("");
+				if(list.length>0){
+				for (var i = 0; i < list.length; i++) {
+					var carn=list[i].carNumber;
+					var adr=list[i].adress;
+                  if(carn==null||carn==""||carn.length<10){
+					}else{
+					  carn=carn.substring(0,7);
+					}
+                  if(adr==null||adr==""||adr.length<16){
+					}else{
+					  adr=adr.substring(0,17);
+					}
+					st+='<li><div style="margin-left:5px;width: 90px;float: left;">'+carn+"</div><div style='margin-left:5px;width: 136px;float:left;'>"+list[i].enterTime +"</div><div style='margin-left:10px;width:240px;float:left;' title="+list[i].adress+">"+adr+"</div><div style='margin-left:10px;width:20px;float:left;'>"+list[i].num+'</div></li>';
+				}
+				}
+				$('#con3').html(st);
+			}
+		});
+ 		setTimeout('getCarsph()', 50*1000); 
+    }
+    var s1= null;
+    var s2= null;
+    var s3= null;
+    //轮播车辆归属地分布图，柱状图，饼状图
+    $(function(){
+   	    load_home2();
+    })
+    function load_home1() {	
+  		document.getElementById("carFromDiv").innerHTML = 
+  			'<object type="text/html" data="modules/generator/sc_gsdzzt.html" width="100%" height="542px"></object>';
+  		clearInterval(s1); 
+}
+function load_home2() {
+		 document.getElementById("carFromDiv").innerHTML = 
+		'<object type="text/html" data="modules/generator/sc_gsdzzt.html" width="100%" height="542px"></object>';
+}
+function load_home3() {	
+		 document.getElementById("carFromDiv").innerHTML = 
+		'<object type="text/html" data="modules/generator/sc_gsdbzt.html" width="100%" height="542px"></object>';
+		clearInterval(s3);
+}
+    </script>
+     <script type="text/javascript">            
+                var area =document.getElementById('tableInfo2');
+                var con1 = document.getElementById('con1');
+                var con2 = document.getElementById('con2');
+                con2.innerHTML=con1.innerHTML;
+                function scrollUp(){
+                if(area.scrollTop>=con1.offsetHeight){
+                    area.scrollTop=0;
+                }else{
+                    area.scrollTop++
+                }
+                }                
+                var time = 50;
+                var mytimer=setInterval(scrollUp,time);
+                area.onmouseover=function(){
+                    clearInterval(mytimer);
+                }
+                area.onmouseout=function(){
+                    mytimer=setInterval(scrollUp,time);
+                }
+                
+                var area1 =document.getElementById('tableInfo');
+                var con3 = document.getElementById('con3');
+                var con4 = document.getElementById('con4');
+                con4.innerHTML=con3.innerHTML;
+                function scrollUp1(){
+                if(area1.scrollTop>=con3.offsetHeight){
+                    area1.scrollTop=0;
+                }else{
+                    area1.scrollTop++
+                }
+                }                
+                var time1 = 50;
+                var mytimer1=setInterval(scrollUp1,time1);
+                area1.onmouseover=function(){
+                    clearInterval(mytimer1);
+                }
+                area1.onmouseout=function(){
+                    mytimer1=setInterval(scrollUp1,time1);
+                }
+        </script>
+    </body>
+</html>

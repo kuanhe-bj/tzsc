@@ -1,0 +1,57 @@
+﻿# Tomcat
+server:
+    tomcat:
+        uri-encoding: UTF-8
+        max-threads: 1000
+        min-spare-threads: 30
+    port: 8081
+    connection-timeout: 5000
+    context-path: ${context}
+logging:
+    config: classpath:logback-spring.xml
+spring:
+    # 环境 dev|test|pro|
+    profiles:
+        active: ${activatedProperties}
+    # jackson时间格式化
+    jackson:
+        time-zone: GMT+8
+        date-format: yyyy-MM-dd HH:mm:ss
+    http:
+        multipart:
+            max-file-size: 100MB
+            max-request-size: 100MB
+            enabled: true
+    resources: # 指定静态资源的路径
+        static-locations: classpath:/static/,classpath:/views/,classpath:/tzscdemo/
+    cas:
+        server:
+            url: ${cas.server.url}
+            login:
+                url: ${cas.server.url}/login
+        client:
+            url: ${cas.client.url}
+            filter:
+                url: ${cas.client.url}/vas/login.html
+    subscribes:
+        receive:
+            address: ${gateway.url}/vas/VIID/SubscribeNotifications
+    dispositions:
+        receive:
+            address: ${gateway.url}/vas/VIID/notification/receive
+
+# Mybatis配置
+mybatis:
+    mapperLocations: classpath:mapper/**/*.xml
+    configuration:
+        map-underscore-to-camel-case: true
+
+renren:
+    # APP模块，是通过jwt认证的，如果要使用APP模块，则需要修改【加密秘钥】
+    jwt:
+        # 加密秘钥
+        secret: f4e2e52034348f86b67cde581c0f9eb5[www.renren.io]
+        # token有效时长，7天，单位秒
+        expire: 604800
+        header: token
+

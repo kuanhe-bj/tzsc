@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.vas.dao.ScScajDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.renren.vas.entity.ScScajEntity" id="scScajMap">
+        <result property="id" column="ID"/>
+        <result property="ajbh" column="AJBH"/>
+        <result property="ajmc" column="AJMC"/>
+        <result property="pcsgxid" column="PCSGXID"/>
+        <result property="jq" column="JQ"/>
+        <result property="faddid" column="FADDID"/>
+        <result property="faddxz" column="FADDXZ"/>
+        <result property="fakssj" column="FAKSSJ"/>
+        <result property="cph" column="CPH"/>
+    </resultMap>
+
+	<select id="queryObject" resultType="io.renren.vas.entity.ScScajEntity">
+		select * from sc_scaj where ID = ${value}
+	</select>
+
+	<select id="queryList" resultType="io.renren.vas.entity.ScScajEntity">
+		select * from sc_scaj
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by ID desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{limit} offset #{offset}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from sc_scaj 
+	</select>
+	 
+	<insert id="save" parameterType="io.renren.vas.entity.ScScajEntity">
+		insert into sc_scaj
+		(
+			ID, 
+			AJBH, 
+			AJMC, 
+			PCSGXID, 
+			JQ, 
+			FADDID, 
+			FADDXZ, 
+			FAKSSJ, 
+			CPH
+		)
+		values
+		(
+			(select coalesce(max(id),0)+1 from sc_scaj), 
+			#{ajbh}, 
+			#{ajmc}, 
+			#{pcsgxid}, 
+			#{jq}, 
+			#{faddid}, 
+			#{faddxz}, 
+			'${fakssj}', 
+			#{cph}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="io.renren.vas.entity.ScScajEntity">
+		update sc_scaj 
+		<set>
+			<if test="ajbh != null">AJBH = #{ajbh}, </if>
+			<if test="ajmc != null">AJMC = #{ajmc}, </if>
+			<if test="pcsgxid != null">PCSGXID = #{pcsgxid}, </if>
+			<if test="jq != null">JQ = #{jq}, </if>
+			<if test="faddid != null">FADDID = #{faddid}, </if>
+			<if test="faddxz != null">FADDXZ = #{faddxz}, </if>
+			<if test="fakssj != null">FAKSSJ = #{fakssj}, </if>
+			<if test="cph != null">CPH = #{cph}</if>
+		</set>
+		where ID = ${id}
+	</update>
+	
+	<delete id="delete">
+		delete from sc_scaj where ID = ${value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from sc_scaj where ID in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			${id}
+		</foreach>
+	</delete>
+
+</mapper>

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title></title>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta
+	content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+	name="viewport">
+<link rel="stylesheet" href="../../css/bootstrap.min.css">
+<link rel="stylesheet" href="../../css/font-awesome.min.css">
+<link rel="stylesheet"
+	href="../../plugins/jqgrid/ui.jqgrid-bootstrap.css">
+<link rel="stylesheet"
+	href="../../plugins/ztree/css/metroStyle/metroStyle.css">
+<link rel="stylesheet" href="../../css/main.css">
+<script src="../../libs/jquery.min.js"></script>
+<script src="../../plugins/layer/layer.js"></script>
+<script src="../../libs/bootstrap.min.js"></script>
+<script src="../../libs/vue.min.js"></script>
+<script src="../../plugins/jqgrid/grid.locale-cn.js"></script>
+<script src="../../plugins/jqgrid/jquery.jqGrid.min.js"></script>
+<script src="../../plugins/ztree/jquery.ztree.all.min.js"></script>
+<script src="../../js/common.js"></script>
+
+</head>
+<body>
+	<div id="rrapp" v-cloak>
+		<div v-show="showList">
+			<div class="grid-btn">
+				<div class="form-group col-sm-2">
+					<select class="form-control" id="sel" name="sel" v-model="q.sel"
+						onchange="javascript:doit();">
+						<!-- <option selected="selected">请选择</option>  -->
+						<option value="1">轨迹实时</option>
+						<option value="2">位置实时</option>
+						<option value="3">重点区域</option>
+					</select>
+				</div>
+				
+<!-- 				<div class="form-group col-sm-2" style="display: inline; width: 268px; height: 34px;">
+					<input type="text" class="form-control" id="cph" v-model="q.cph" placeholder="车牌号" >
+				</div> -->
+				<div class="form-group col-sm-2" id="div1"
+					style="display: inline; width: 268px; height: 34px;"
+					style="display:none;">
+					<input type="text" class="form-control" id="time1"
+						v-model="q.time1" name="time1" onblur="SetQssj(this.value)"
+						placeholder="开始时间" style="display: none;">
+				</div>
+				<div class="form-group col-sm-2" id="div2"
+					style="display: inline; width: 268px; height: 34px;"
+					style="display:none;">
+					<input type="text" class="form-control" id="time2"
+						v-model="q.time2" name="time2" onblur="SetJssj(this.value)"
+						placeholder="结束时间" style="display: none;">
+				</div>
+<!-- 				<div class="form-group col-sm-2" id="div4" style="display: none;">
+					<input type="text" class="form-control" id="center" v-model="q.center"
+						name="center" placeholder="中心点">
+				</div> -->
+				<br /> <br /> <br />
+				<div id="div4" class="form-group col-sm-2" style="display: inline;margin-bottom:15px;">
+					<input id="cph" type="text" class="form-control" id="cph" v-model="q.cph" placeholder="车牌号" >
+				</div>
+				<!-- 加载地图 -->
+				<div id="map" style="width:100%;height:450px;display: none;"></div>
+				 <iframe src="zhongxindian.html" style="display: none;"></iframe>
+				<a class="btn btn-primary" @click="query" style = "margin-left:10px;margin-bottom:15px;"
+					style="background-color: #337ab7;">创建</a>
+				<button v-if="hasPermission('generator:scbdqcl:delete')"
+					style="background-color: #337ab7;margin-bottom:15px;" class="btn btn-primary"
+					@click="del">
+					<i class="fa fa-trash-o"></i>&nbsp;删除
+				</button>
+			<table id="jqGrid"></table>
+			<div id="jqGridPager"></div>
+			</div>
+		</div>
+	</div>
+
+	<script src="../superMap/SuperMap-8.1.1-14426.js" type="text/javascript"></script>
+	<script src="../superMap/SuperMap_Plot-8.1.1-14426.js"
+		type="text/javascript"></script>
+	<script src="../js/sc_jkrw.js"></script>
+	<script src="../data/pInfo.js" type="text/javascript"></script>
+	<script src="../js/zhongdianquyu.js" type="text/javascript"></script>
+
+	<script type="text/javascript"> 
+	function a(obj){return document.getElementById(obj);} 
+	function show(objid) {a(objid).style.display='inline';} 
+	function hidden(objid) {a(objid).style.display='none';} 
+	function doit(){ 
+	var sel_val=a('sel').value; 
+		if (sel_val=='') {hidden('div1');hidden('div2');hidden('map');hidden('time1');hidden('time2');} 
+		if (sel_val==0) {hidden('div1');hidden('div2');hidden('map');hidden('time1');hidden('time2');} 
+		if (sel_val==1) {show('div1');show('div2');show('time1');show('time2');hidden('map');show('div4');show('cph');} 
+		if (sel_val==2) {hidden('div1');hidden('div2');hidden('map');hidden('time1');hidden('time2');show('div4');show('cph');}
+		if (sel_val==3) {hidden('div1');hidden('div2');hidden('time1');hidden('time2');show('map');hidden('div4');hidden('cph');load_home();}
+	} 
+	function load_home() {	
+		//console.log("load_home");
+ 		document.getElementById("map").innerHTML = 
+  		'<object type="text/html" data="zhongxindian.html" style="border-radius: 25px 0px 50px;width:100%;height:450px;"></object>';	
+}
+	</script>
+
+	<script src="../laydate-master/dist/laydate.js"></script>
+	<script>
+	laydate.render({
+		elem : '#time1'
+	});
+	laydate.render({
+		elem : '#time2'
+	});
+	function SetQssj(datas) {
+		var qssj = $('#time1').val(datas);
+	}
+	function SetJssj(datas) {
+		var jssj = $('#time2').val(datas);
+	}
+	</script>
+</body>
+</html>

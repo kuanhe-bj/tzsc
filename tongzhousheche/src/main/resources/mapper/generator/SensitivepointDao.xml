@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.vas.dao.SensitivepointDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.renren.vas.entity.SensitivepointEntity" id="sensitivepointMap">
+        <result property="id" column="id"/>
+        <result property="stype" column="sType"/>
+        <result property="center" column="center"/>
+        <result property="x" column="x"/>
+        <result property="y" column="y"/>
+        <result property="grade" column="grade"/>
+    </resultMap>
+
+	<select id="queryObject" resultType="io.renren.vas.entity.SensitivepointEntity">
+		select * from sensitivepoint where id = ${value}
+	</select>
+
+	<select id="queryList" resultType="io.renren.vas.entity.SensitivepointEntity">
+		select * from sensitivepoint
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{limit} offset #{offset}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from sensitivepoint 
+	</select>
+	 
+	<insert id="save" parameterType="io.renren.vas.entity.SensitivepointEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into sensitivepoint
+		(
+			sType, 
+			center, 
+			x, 
+			y, 
+			grade
+		)
+		values
+		(
+			#{stype}, 
+			#{center}, 
+			#{x}, 
+			#{y}, 
+			#{grade}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="io.renren.vas.entity.SensitivepointEntity">
+		update sensitivepoint 
+		<set>
+			<if test="stype != null">sType = #{stype}, </if>
+			<if test="center != null">center = #{center}, </if>
+			<if test="x != null">x = #{x}, </if>
+			<if test="y != null">y = #{y}, </if>
+			<if test="grade != null">grade = #{grade}</if>
+		</set>
+		where id = ${id}
+	</update>
+	
+	<delete id="delete">
+		delete from sensitivepoint where id = ${value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from sensitivepoint where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			${id}
+		</foreach>
+	</delete>
+
+</mapper>

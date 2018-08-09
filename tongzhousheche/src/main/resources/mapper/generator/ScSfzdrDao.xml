@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.vas.dao.ScSfzdrDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.renren.vas.entity.ScSfzdrEntity" id="scSfzdrMap">
+        <result property="xm" column="XM"/>
+        <result property="zjhm" column="ZJHM"/>
+        <result property="fssj" column="FSSJ"/>
+        <result property="hjdxz" column="HJDXZ"/>
+        <result property="dataid" column="DATAID"/>
+    </resultMap>
+
+	<select id="queryObject" resultType="io.renren.vas.entity.ScSfzdrEntity">
+		select * from sc_sfzdr where dataid = #{value}
+	</select>
+
+	<select id="queryList" resultType="io.renren.vas.entity.ScSfzdrEntity">
+		select * from sc_sfzdr
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by dataid desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit  #{limit} offset #{offset}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from sc_sfzdr 
+	</select>
+	 
+	<insert id="save" parameterType="io.renren.vas.entity.ScSfzdrEntity">
+		insert into sc_sfzdr
+		(
+			xm, 
+			zjhm, 
+			fssj, 
+			hjdxz, 
+			dataid
+		)
+		values
+		(
+			#{xm}, 
+			#{zjhm}, 
+			'${fssj}',  
+			#{hjdxz}, 
+			#{dataid}
+		)
+	</insert>
+	 
+	<insert id="update" parameterType="io.renren.vas.entity.ScSfzdrEntity">
+		insert into sc_sfzdr
+		(
+			xm, 
+			zjhm, 
+			fssj, 
+			hjdxz, 
+			dataid
+		) 
+		values
+		(
+			'${xm}', 
+			'${zjhm}', 
+			'${fssj}',  
+			'${hjdxz}', 
+			'${dataid}'
+		)
+	</insert>
+	
+	<delete id="delete">
+		delete from sc_sfzdr where dataid = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from sc_sfzdr where dataid in 
+		<foreach item="dataid" collection="array" open="(" separator="," close=")">
+			#{dataid}
+		</foreach>
+	</delete>
+
+</mapper>

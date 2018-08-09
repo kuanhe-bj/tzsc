@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.vas.dao.ScBdqclDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.renren.vas.entity.ScBdqclEntity" id="scBdqclMap">
+        <result property="id" column="ID"/>
+        <result property="cph" column="CPH"/>
+        <result property="czxm" column="CZXM"/>
+        <result property="czdzid" column="CZDZID"/>
+        <result property="dwmc" column="DWMC"/>
+        <result property="dwdz" column="DWDZ"/>
+        <result property="czxxzd" column="CZXXZD"/>
+        <result property="szxm" column="SZXM"/>
+        <result property="szdzid" column="SZDZID"/>
+        <result property="szxz" column="SZXZ"/>
+        <result property="operatetime" column="OPERATETIME"/>
+        <result property="ajid" column="AJID"/>
+    </resultMap>
+
+	<select id="queryObject" resultType="io.renren.vas.entity.ScBdqclEntity">
+		select * from sc_bdqcl where ID = ${value}
+	</select>
+
+	<select id="queryList" resultType="io.renren.vas.entity.ScBdqclEntity">
+		select * from sc_bdqcl
+	
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by ID desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{limit} offset #{offset}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from sc_bdqcl 
+	</select>
+	 
+	<insert id="save" parameterType="io.renren.vas.entity.ScBdqclEntity">
+		insert into sc_bdqcl
+		(
+			ID, 
+			CPH, 
+			CZXM, 
+			CZDZID, 
+			DWMC, 
+			DWDZ, 
+			CZXXZD, 
+			SZXM, 
+			SZDZID, 
+			SZXZ, 
+			OPERATETIME, 
+			AJID
+		)
+		values
+		(
+			#{id}, 
+			#{cph}, 
+			#{czxm}, 
+			#{czdzid}, 
+			#{dwmc}, 
+			#{dwdz}, 
+			#{czxxzd}, 
+			#{szxm}, 
+			#{szdzid}, 
+			#{szxz}, 
+			#{operatetime}, 
+			#{ajid}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="io.renren.vas.entity.ScBdqclEntity">
+		update sc_bdqcl 
+		<set>
+			<if test="cph != null">CPH = #{cph}, </if>
+			<if test="czxm != null">CZXM = #{czxm}, </if>
+			<if test="czdzid != null">CZDZID = #{czdzid}, </if>
+			<if test="dwmc != null">DWMC = #{dwmc}, </if>
+			<if test="dwdz != null">DWDZ = #{dwdz}, </if>
+			<if test="czxxzd != null">CZXXZD = #{czxxzd}, </if>
+			<if test="szxm != null">SZXM = #{szxm}, </if>
+			<if test="szdzid != null">SZDZID = #{szdzid}, </if>
+			<if test="szxz != null">SZXZ = #{szxz}, </if>
+			<if test="operatetime != null">OPERATETIME = #{operatetime}, </if>
+			<if test="ajid != null">AJID = #{ajid}</if>
+		</set>
+		where ID = ${id}
+	</update>
+	
+	<delete id="delete">
+		delete from sc_bdqcl where ID = ${value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from sc_bdqcl where ID in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			${id}
+		</foreach>
+	</delete>
+
+</mapper>

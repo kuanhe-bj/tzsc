@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.vas.dao.ScQgztryxxDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.renren.vas.entity.ScQgztryxxEntity" id="scQgztryxxMap">
+        <result property="rybh" column="RYBH"/>
+        <result property="xm" column="XM"/>
+        <result property="csrq" column="CSRQ"/>
+        <result property="sfzh" column="SFZH"/>
+        <result property="hjdqh" column="HJDQH"/>
+        <result property="hjdz" column="HJDZ"/>
+        <result property="ajbh" column="AJBH"/>
+        <result property="ajlb" column="AJLB"/>
+    </resultMap>
+
+	<select id="queryObject" resultType="io.renren.vas.entity.ScQgztryxxEntity">
+		select * from sc_qgztryxx where rybh = #{value}
+	</select>
+
+	<select id="queryList" resultType="io.renren.vas.entity.ScQgztryxxEntity">
+		select * from sc_qgztryxx
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by rybh desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit  #{limit} offset #{offset}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from sc_qgztryxx 
+	</select>
+	 
+	<insert id="save" parameterType="io.renren.vas.entity.ScQgztryxxEntity">
+		insert into sc_qgztryxx
+		(
+			rybh, 
+			xm, 
+			csrq, 
+			sfzh, 
+			hjdqh, 
+			hjdz, 
+			ajbh, 
+			ajlb
+		)
+		values
+		(
+			#{rybh}, 
+			#{xm}, 
+			#{csrq}, 
+			#{sfzh}, 
+			#{hjdqh}, 
+			#{hjdz}, 
+			#{ajbh}, 
+			#{ajlb}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="io.renren.vas.entity.ScQgztryxxEntity">
+		update sc_qgztryxx 
+		<set>
+			<if test="xm != null">xm = #{xm}, </if>
+			<if test="csrq != null">csrq = #{csrq}, </if>
+			<if test="sfzh != null">sfzh = #{sfzh}, </if>
+			<if test="hjdqh != null">hjdqh = #{hjdqh}, </if>
+			<if test="hjdz != null">hjdz = #{hjdz}, </if>
+			<if test="ajbh != null">ajbh = #{ajbh}, </if>
+			<if test="ajlb != null">ajlb = #{ajlb}</if>
+		</set>
+		where RYBH = #{rybh}
+	</update>
+	
+	<delete id="delete">
+		delete from sc_qgztryxx where rybh = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from sc_qgztryxx where rybh in 
+		<foreach item="rybh" collection="array" open="(" separator="," close=")">
+			#{rybh}
+		</foreach>
+	</delete>
+
+</mapper>

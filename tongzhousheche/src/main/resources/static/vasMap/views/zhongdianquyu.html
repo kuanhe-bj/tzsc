@@ -1,0 +1,82 @@
+<!DOCTYPE>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta
+	content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+	name="viewport">
+<title>重点区域</title>
+<style type="text/css">
+#map {
+	position: relative;
+ 	height: 450px; 
+	border: 1px solid #3473b7; 
+}
+
+#toolbar {
+	position: relative;
+	height: 40px;
+	padding-top: 5;
+}
+.ui-jqgrid .ui-jqgrid-btable tbody tr.jqgrow td{
+    line-height: 23px;
+    height: 23px;
+    
+}
+</style>
+
+<link rel="stylesheet" href="../../css/bootstrap.min.css">
+<link rel="stylesheet" href="../../css/font-awesome.min.css">
+<link rel="stylesheet"
+	href="../../plugins/jqgrid/ui.jqgrid-bootstrap.css">
+<link rel="stylesheet"
+	href="../../plugins/ztree/css/metroStyle/metroStyle.css">
+<link rel="stylesheet" href="../../css/main.css">
+<link href="../../vasMap/theme/default/google.css">
+<link href="../../vasMap/theme/default/style.css">
+<script src="../../libs/jquery.min.js"></script>
+<script src="../../plugins/layer/layer.js"></script>
+
+<script src="../../libs/vue.min.js"></script>
+<script src="../../libs/validator.min.js"></script>
+<script src="../../plugins/jqgrid/grid.locale-cn.js"></script>
+<script src="../../plugins/jqgrid/jquery.jqGrid.min.js"></script>
+<script src="../../plugins/ztree/jquery.ztree.all.min.js"></script>
+<script src="../../js/common.js"></script>
+<script src="../data/pInfo.js" type="text/javascript"></script>
+<script src="../superMap/SuperMap-8.1.1-14426.js" type="text/javascript"></script>
+<script src="../superMap/SuperMap_Plot-8.1.1-14426.js"
+	type="text/javascript"></script>
+<script src="../js/zhongdianquyu.js" type="text/javascript"></script>
+<script src="../laydate-master/dist/laydate.js"></script>
+</head>
+<body>
+	<div id="toolbar" >
+		<div class="form-group col-sm-2"style="width: 180px;">
+				<input type="text" style="width: 150px;" class="form-control" id="banjing"  placeholder="查询范围(公里)" >
+		</div>
+		<div class="form-group col-sm-2"style="width: 180px;">
+				<input type="text" style="width: 150px;" class="form-control" id="cishu"  placeholder="徘徊次数(大于等于)">
+		</div>
+		<div class="form-group col-sm-2"style="width: 180px;">
+				<input type="text" style="width: 150px;" class="form-control" id="qssj"  placeholder="起始时间" readonly="readonly">
+		</div>
+		<div class="form-group col-sm-2"style="width: 180px;">
+				<input type="text" style="width: 150px;" class="form-control" id="jssj"  placeholder="结束时间" readonly="readonly">
+		</div>
+		<div >
+			<input type="button" class="btn btn-primary" value="重点区中心点" @click="selectCenters" /> 
+			<input type="button" class="btn btn-primary" value="提交" @click="display" /> 
+			<input type="button" class="btn btn-primary" value="清除" @click="clear" />
+<!-- 			<input type="button" class="btn btn-primary" value="重点区域" @click="zd" /> -->
+		</div>
+	</div>
+		<div id="map" style="width:100%;"></div>
+		<div style="width:100%;height:600px;margin-top:10px;">
+				<table id="jqGrid"></table>
+		    <div id="jqGridPager" style="width:100%;height:50px;"></div>
+	    </div>
+</body>
+</html>

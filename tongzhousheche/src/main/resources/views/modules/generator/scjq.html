@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title></title>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta
+	content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+	name="viewport">
+<link rel="stylesheet" href="../../css/bootstrap.min.css">
+<link rel="stylesheet" href="../../css/font-awesome.min.css">
+<link rel="stylesheet"
+	href="../../plugins/jqgrid/ui.jqgrid-bootstrap.css">
+<link rel="stylesheet"
+	href="../../plugins/ztree/css/metroStyle/metroStyle.css">
+<link rel="stylesheet" href="../../css/main.css">
+<script src="../../libs/jquery.min.js"></script>
+<script src="../../plugins/layer/layer.js"></script>
+<script src="../../libs/bootstrap.min.js"></script>
+<script src="../../libs/vue.min.js"></script>
+<script src="../../plugins/jqgrid/grid.locale-cn.js"></script>
+<script src="../../plugins/jqgrid/jquery.jqGrid.min.js"></script>
+<script src="../../plugins/ztree/jquery.ztree.all.min.js"></script>
+<script src="../../js/common.js"></script>
+</head>
+<body>
+	<div id="rrapp" v-cloak>
+		<div v-show="showList">
+			<div class="grid-btn">
+				<div class="form-group col-sm-2">
+					<input type="text" class="form-control" id="carNum"
+						v-model="scJq.cph" placeholder="车牌号" onblur="check()" />
+				</div>
+				<button class="btn btn-primary" @click="query">查询</button>
+				<a v-if="hasPermission('generator:scjq:save')"
+					class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
+				<a v-if="hasPermission('generator:scjq:update')"
+					class="btn btn-primary" @click="update"><i
+					class="fa fa-pencil-square-o"></i>&nbsp;修改</a> <a
+					v-if="hasPermission('generator:scjq:delete')"
+					class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+			</div>
+			<table id="jqGrid"></table>
+			<div id="jqGridPager"></div>
+		</div>
+
+		<div v-show="!showList" class="panel panel-default">
+			<div class="panel-heading">{{title}}</div>
+			<form class="form-horizontal">
+				<div class="form-group">
+					<div class="col-sm-2 control-label">接处警编号</div>
+					<div class="col-sm-10">
+						<input type="text" class="form-control" v-model="scJq.jcjbh"
+							placeholder="" />
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-2 control-label">案(事)件发生时间</div>
+					<div class="col-sm-10">
+						<input id="asjfssj" type="text" class="form-control"
+							v-model="scJq.asjfssj" placeholder=""
+							onblur="SetJssj(this.value)" />
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-2 control-label">案(事)件结束时间</div>
+					<div class="col-sm-10">
+						<input id="asjjssj" type="text" class="form-control"
+							v-model="scJq.asjjssj" placeholder=""
+							onblur="SetQssj(this.value)" />
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-2 control-label">案(事)件发生地点（流⽔号）#XZQH</div>
+					<div class="col-sm-10">
+						<input type="text" class="form-control" v-model="scJq.asjfsddid"
+							placeholder="" />
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-2 control-label">案(事)件发生地详址</div>
+					<div class="col-sm-10">
+						<input type="text" class="form-control" v-model="scJq.asjfsxz"
+							placeholder="" />
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-2 control-label">反映内容</div>
+					<div class="col-sm-10">
+						<input type="text" class="form-control" v-model="scJq.fynr"
+							placeholder="" />
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-2 control-label">所属派出所（流水号）#SSPCS</div>
+					<div class="col-sm-10">
+						<input type="text" class="form-control" v-model="scJq.sspcsid"
+							placeholder="" />
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-2 control-label">案(事)件类型（流⽔号）#JJAJLX</div>
+					<div class="col-sm-10">
+						<input type="text" class="form-control" v-model="scJq.asjlxid"
+							placeholder="" />
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-2 control-label">车牌号</div>
+					<div class="col-sm-10">
+						<input type="text" class="form-control" v-model="scJq.cph"
+							placeholder="" />
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-2 control-label">报案人名称</div>
+					<div class="col-sm-10">
+						<input type="text" class="form-control" v-model="scJq.barmc"
+							placeholder="" />
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-2 control-label">报案单位名称</div>
+					<div class="col-sm-10">
+						<input type="text" class="form-control" v-model="scJq.badwmc"
+							placeholder="" />
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-2 control-label"></div>
+					<input type="button" class="btn btn-primary" @click="saveOrUpdate"
+						value="确定" /> &nbsp;&nbsp;<input type="button"
+						class="btn btn-warning" @click="reload" value="返回" />
+				</div>
+			</form>
+		</div>
+	</div>
+
+	<script src="../../js/modules/generator/scjq.js"></script>
+	<script src="../../vasMap/laydate-master/dist/laydate.js"></script>
+	<script>
+		laydate.render({
+			elem : '#asjfssj'
+		});
+		laydate.render({
+			elem : '#asjjssj'
+		});
+		function SetQssj(datas) {
+			var qssj = $('#asjjssj').val(datas);
+		}
+		function SetJssj(datas) {
+			var jssj = $('#asjfssj').val(datas);
+		}
+	</script>
+</body>
+</html>

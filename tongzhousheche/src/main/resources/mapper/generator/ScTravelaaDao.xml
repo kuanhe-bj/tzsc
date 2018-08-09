@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.modules.generator.dao.ScTravelaaDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.renren.vas.entity.ScTravelaaEntity" id="scTravelaaMap">
+        <result property="id" column="id"/>
+        <result property="carnum" column="carNum"/>
+        <result property="abnormal3month" column="abnormal3Month"/>
+        <result property="abnormal6month" column="abnormal6Month"/>
+        <result property="abnormal12month" column="abnormal12Month"/>
+        <result property="abnormaltotal" column="abnormalTotal"/>
+        <result property="travelabnormal" column="TravelAbnormal"/>
+    </resultMap>
+
+	<select id="queryObject" resultType="io.renren.vas.entity.ScTravelaaEntity">
+		select * from sc_travelaa where id = #{value}
+	</select>
+
+	<select id="queryList" resultType="io.renren.vas.entity.ScTravelaaEntity">
+		select * from sc_travelaa
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from sc_travelaa 
+	</select>
+	 
+	<insert id="save" parameterType="io.renren.vas.entity.ScTravelaaEntity">
+		insert into sc_travelaa
+		(
+			`id`, 
+			`carNum`, 
+			`abnormal3Month`, 
+			`abnormal6Month`, 
+			`abnormal12Month`, 
+			`abnormalTotal`, 
+			`TravelAbnormal`
+		)
+		values
+		(
+			#{id}, 
+			#{carnum}, 
+			#{abnormal3month}, 
+			#{abnormal6month}, 
+			#{abnormal12month}, 
+			#{abnormaltotal}, 
+			#{travelabnormal}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="io.renren.vas.entity.ScTravelaaEntity">
+		update sc_travelaa 
+		<set>
+			<if test="carnum != null">`carNum` = #{carnum}, </if>
+			<if test="abnormal3month != null">`abnormal3Month` = #{abnormal3month}, </if>
+			<if test="abnormal6month != null">`abnormal6Month` = #{abnormal6month}, </if>
+			<if test="abnormal12month != null">`abnormal12Month` = #{abnormal12month}, </if>
+			<if test="abnormaltotal != null">`abnormalTotal` = #{abnormaltotal}, </if>
+			<if test="travelabnormal != null">`TravelAbnormal` = #{travelabnormal}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from sc_travelaa where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from sc_travelaa where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

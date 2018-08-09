@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.vas.dao.ScRcglDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.renren.vas.entity.ScRcglEntity" id="scRcglMap">
+        <result property="cp" column="cp"/>
+        <result property="owner" column="owner"/>
+        <result property="brand" column="brand"/>
+        <result property="color" column="color"/>
+        <result property="xm" column="xm"/>
+        <result property="sfz" column="sfz"/>
+        <result property="sjly" column="sjly"/>
+    </resultMap>
+
+	<select id="queryObject" resultType="io.renren.vas.entity.ScRcglEntity">
+		select * from sc_rcgl where cp = #{value}
+	</select>
+
+	<select id="queryList" resultType="io.renren.vas.entity.ScRcglEntity">
+		select * from sc_rcgl
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by cp desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from sc_rcgl 
+	</select>
+	 
+	<insert id="save" parameterType="io.renren.vas.entity.ScRcglEntity">
+		insert into sc_rcgl
+		(
+			`cp`, 
+			`owner`, 
+			`brand`, 
+			`color`, 
+			`xm`, 
+			`sfz`, 
+			`sjly`
+		)
+		values
+		(
+			#{cp}, 
+			#{owner}, 
+			#{brand}, 
+			#{color}, 
+			#{xm}, 
+			#{sfz}, 
+			#{sjly}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="io.renren.vas.entity.ScRcglEntity">
+		update sc_rcgl 
+		<set>
+			<if test="owner != null">`owner` = #{owner}, </if>
+			<if test="brand != null">`brand` = #{brand}, </if>
+			<if test="color != null">`color` = #{color}, </if>
+			<if test="xm != null">`xm` = #{xm}, </if>
+			<if test="sfz != null">`sfz` = #{sfz}, </if>
+			<if test="sjly != null">`sjly` = #{sjly}</if>
+		</set>
+		where cp = #{cp}
+	</update>
+	
+	<delete id="delete">
+		delete from sc_rcgl where cp = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from sc_rcgl where cp in 
+		<foreach item="cp" collection="array" open="(" separator="," close=")">
+			#{cp}
+		</foreach>
+	</delete>
+
+</mapper>

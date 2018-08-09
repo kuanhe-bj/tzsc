@@ -1,0 +1,45 @@
+<!DOCTYPE>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>热点图</title>
+<style type="text/css">
+body {
+	margin: 0;
+	overflow: hidden;
+	background: #fff;
+}
+
+#map {
+	position: relative;
+	height: 520px;
+	border: 1px solid #3473b7;
+}
+
+#toolbar {
+	position: relative;
+	height: 33px;
+	padding-top: 5;
+}
+</style>
+<link href="../theme/default/google.css">
+<link href="../theme/default/style.css">
+
+<script src="../superMap/jquery.min.js"></script>
+<script src="../superMap/vue.min.js"></script>
+<script src="../superMap/validator.min.js"></script>
+<script src="../superMap/jquery.jqGrid.min.js"></script>
+<script src="../superMap/jquery.ztree.all.min.js"></script>
+<script src="../superMap/common.js"></script>
+<script src="../superMap/pInfo.js" type="text/javascript"></script>
+<script src="../superMap/SuperMap-8.1.1-14426.js" type="text/javascript"></script>
+<script src="../superMap/SuperMap_Plot-8.1.1-14426.js" type="text/javascript"></script>
+<script src="../js/screlitu5.js" type="text/javascript"></script>
+</head>
+<body >
+	<div id="rrapp" >
+		<button @click="display" id="btn" onclick = "getMap();">113卡口热力图</button>	
+	</div>
+	<div id="map"></div>
+</body>
+</html>

@@ -1,0 +1,598 @@
+﻿/**----------------------------全局-----------------------*/
+li {
+    list-style-type: none;
+    margin-bottom: 5px;
+}
+
+ul {
+    padding-left: 0px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+
+.fg {
+    height: 26px;
+    width: 1.8px;
+    background-color: #E1E1E1;
+    margin-top: 7px;
+    float: left;
+    margin-left: 5px;
+}
+
+/**----------------------------全局结束-----------------------*/
+
+/**----------------------------功能按钮-----------------------*/
+#map_function_btn {
+    position: absolute;
+    background-color: white;
+    z-index: 50;
+    top: 25px;
+    left: 25px;
+    font: 15px '微软雅黑';
+    height: 40px;
+    box-shadow: 2px 4px 5px #000;
+}
+
+    #map_function_btn a {
+        color: black;
+    }
+
+    #map_function_btn > ul > li {
+        float: left;
+    }
+
+        #map_function_btn > ul > li > a > img, #map_function_btn > ul > li > a > span {
+            float: left;
+            margin-left: 5px;
+        }
+
+        #map_function_btn > ul > li > a > img {
+            margin-top: 8px;
+        }
+
+        #map_function_btn > ul > li > a > span {
+            margin-top: 10px;
+        }
+
+        #map_function_btn > ul > li > a > .mark_small {
+            margin-top: 15px;
+        }
+
+.dispatch_mark {
+    margin-right: 5px;
+}
+
+.select_child {
+    position: absolute;
+    background-color: white;
+    top: 40px;
+    width: 102px;
+}
+
+    .select_child li {
+        height: 35px;
+    }
+
+    .select_child ul li a * {
+        float: left;
+        margin-left: 5px;
+        margin-top: 8px;
+    }
+
+    .select_child ul li a span {
+        margin-top: 10px;
+        margin-right: 8px;
+    }
+
+#map_function_btn .select_child ul li a:hover {
+    color: #3E99FF;
+}
+
+.jcy_child, .dispatch_child, .map_child {
+    display: none;
+}
+/**----------------------------功能按钮结束-----------------------*/
+
+/**----------------------------底图切换样式-----------------------*/
+#base_map {
+    z-index: 50;
+    position: absolute;
+    right: 20px;
+    bottom: 35px;
+    background-color: white;
+}
+
+    #base_map div {
+        float: left;		
+    }
+
+    #base_map a {
+        width: 180px;
+        height: 138px;
+        display: block;
+        margin: 6px;
+        color: white;
+        text-decoration: none;
+        border-style: solid;
+        border-width: 2px;
+        position: relative;
+    }
+
+    #base_map span {
+        font: 400 13px '微软雅黑';
+        position: static;
+        right: 8px;
+    }
+
+.basemap_span_hover {
+    background-color: #3385FF;
+}
+
+.basemap_a_hover {
+    border-color: #3385FF;
+}
+
+.basemap_span_selected {
+    background-color: #3385FF;
+}
+
+.basemap_a_selected {
+    border-color: #3385FF;
+}
+
+.img_map {
+    background-image: url('images/yx.png');
+}
+
+.vector_map {
+    background-image: url('images/tuli.png');
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: contain;
+}
+/**----------------------------底图切换样式结束-----------------------*/
+
+/**----------------------------地图数据查询-----------------------*/
+#map_search {
+    position: absolute;
+    background-color: white;
+    z-index: 50;
+    left: 50px;
+    height: 40px;
+    top: 25px;
+    box-shadow: 2px 4px 5px #000;
+}
+
+    #map_search > div {
+        float: left;
+    }
+
+    #map_search div img {
+        margin-top: 6px;
+        margin-left: 8px;
+        margin-right: 6px;
+        height: 17px;
+    }
+
+    #map_search > div > input {
+        margin: 5px 10px 2px 10px;
+        width: 200px;
+        height: 30px;
+        border: 0px;
+        padding: 0px;
+        font-family: '微软雅黑';
+        font-size: 15px;
+    }
+
+.layer_content {
+    font-family: '微软雅黑';
+    font-size: 15px;
+}
+
+#search_div {
+    background-color: #3385FF;
+    height: 40px;
+}
+
+    #search_div:hover {
+        background-color: #2EC7E5;
+    }
+
+#map_search #search_div img {
+    margin: 8px 10px;
+}
+
+#map_search .fg {
+    margin-left: 0px;
+}
+
+#layer_selected {
+    width: 130px;
+    height: 40px;
+}
+
+    #layer_selected .layer_title {
+        height: 31px;
+        padding-top: 9px;
+        padding-left: 16px;
+        font-family: '微软雅黑';
+        font-size: 16px;
+        background-color: #3385ff;
+    }
+
+    #layer_selected .layer_content {
+        background-color: white;
+    }
+
+        #layer_selected .layer_content li {
+            padding-left: 5px;
+        }
+
+    #layer_selected li {
+        height: 33px;
+        line-height: 33px;
+        margin-bottom: 0px;
+    }
+
+    #layer_selected a {
+        color: black;
+        text-decoration: none;
+    }
+
+        #layer_selected a span {
+            color: rgba(10, 10, 10, 0.973);
+        }
+
+.layer_title img {
+    float: right;
+}
+
+.layer_content {
+    display: none;
+}
+
+.result_open {
+    position: absolute;
+    left: 0px;
+    z-index: 50;
+    background-color: white;
+    top: 250px;
+    width: 20px;
+    height: 50px;
+}
+
+    .result_open img {
+        margin-top: 19px;
+        margin-left: 4px;
+    }
+
+    .result_open:hover {
+        cursor: pointer;
+    }
+
+.result_container {
+    width: 0px;
+    position: absolute;
+    left: 0px;
+    height: 100%;
+    z-index: 50;
+    background-color: white;
+    top: 0px;
+    overflow: hidden;
+}
+
+.map_container {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0px;
+    left: 0px;
+}
+
+.data_result {
+    font-family: '微软雅黑';
+    font-size: 15px;
+    height: 520px;
+    overflow: auto;
+    overflow-x: hidden;
+}
+
+.data_result_title {
+    height: 40px;
+    background-color: #E5EDEF;
+    margin: 1px 2px 0px 1px;
+}
+
+    .data_result_title * {
+        margin-top: 8px;
+        float: left;
+        margin-left: 15px;
+    }
+
+    .data_result_title span {
+        color: red;
+        margin-left: 5px;
+    }
+
+.data_result_count {
+    height: 38px;
+}
+
+    .data_result_count * {
+        float: left;
+        margin-top: 8px;
+        margin-left: 15px;
+    }
+
+    .data_result_count span {
+        color: red;
+    }
+
+.data_result_content > ul > li {
+    height: 93px;
+    /*_background-color: #EBF2F8;*/
+    margin: 2px 3px 0px 1px;
+    width: 246px;
+}
+
+    .data_result_content > ul > li .child_content {
+        width: 185px;
+    }
+
+    .data_result_content > ul > li div {
+        float: left;
+    }
+
+    .data_result_content > ul > li > div > ul {
+        margin: 6px 0px 0px 6px;
+    }
+
+        .data_result_content > ul > li > div > ul li {
+            margin-bottom: 2px;
+        }
+
+        .data_result_content > ul > li > div > ul .name {
+            font-size: 14px;
+            color: blue;
+        }
+
+        .data_result_content > ul > li > div > ul .tel {
+            font-size: 13px;
+        }
+
+        .data_result_content > ul > li > div > ul .add {
+            font-size: 12px;
+        }
+
+        .data_result_content > ul > li > div > ul .cselect {
+            background-color: #EBF2F8;
+        }
+
+.buffer_result {
+    display: none;
+    overflow: auto;
+    height: 530px;
+    overflow-x: hidden;
+}
+
+.buffer_result_title {
+    font-family: '微软雅黑';
+    font-weight: bold;
+    height: 40px;
+    background-color: #e5edef;
+}
+
+    .buffer_result_title span {
+        margin-top: 9px;
+        float: left;
+        margin-left: 90px;
+    }
+
+.buffer_result_content {
+    margin-right: 2px;
+    margin-top: 1px;
+    overflow: hidden;
+    font-family: '微软雅黑';
+}
+
+.buffer_result_child_content > ul > li > div {
+    float: left;
+}
+
+.buffer_result_child_content > ul > li .child_content {
+    width: 185px;
+}
+
+.buffer_result_child_content > ul > li > div > ul {
+    margin: 4px 0px 0px 4px;
+}
+
+    .buffer_result_child_content > ul > li > div > ul .name {
+        font-size: 14px;
+        color: blue;
+    }
+
+    .buffer_result_child_content > ul > li > div > ul .tel {
+        font-size: 13px;
+    }
+
+    .buffer_result_child_content > ul > li > div > ul .add {
+        font-size: 13px;
+    }
+
+    .buffer_result_child_content > ul > li > div > ul .cselect {
+        background-color: #EBF2F8;
+    }
+
+.buffer_result_child_content_display {
+    height: 0px;
+    overflow: hidden;
+}
+
+.buffer_result_child_content > ul > li {
+    height: 93px;
+    margin: 2px 3px 0px 1px;
+    width: 246px;
+}
+
+.buffer_result_kind {
+    height: 40px;
+    /*background-color: #ffd800;*/
+    background: url("images/bg_glass.png") repeat-x scroll 50% 50%;
+    border-radius: 4px 4px;
+    border: 1px solid #7fd4d9;
+    display: block;
+    cursor: pointer;
+    width: 99%;
+}
+
+    .buffer_result_kind:hover {
+        color: red;
+        background: url("images/bg_glass_click.png") repeat-x scroll 50% 50%;
+    }
+
+    .buffer_result_kind .name {
+        margin-left: 20px;
+        margin-top: 9px;
+        float: left;
+    }
+
+    .buffer_result_kind .num {
+        float: right;
+        margin-right: 20px;
+        margin-top: 9px;
+    }
+
+.search_kind_child {
+    display: none;
+    background-color: white;
+    position: absolute;
+    margin: -33px 0 0 100px;
+    width: 90px;
+}
+
+    .search_kind_child li {
+        height: 33px;
+    }
+
+.search_result_data {
+    float: left;
+    width: 120px;
+    margin-left: 2px;
+    border: solid 1px #3385ff;
+    border-left-color: white;
+    border-bottom-color: white;
+    border-right-width: 2px;
+    text-align: center;
+}
+
+.search_result_buffer {
+    float: left;
+    width: 120px;
+    margin-left: 0px;
+    border: solid 1px #3385ff;
+    border-right-color: white;
+    border-bottom-color: white;
+    border-left-width: 2px;
+    text-align: center;
+}
+
+.tab_result_selected {
+    color: white;
+    background-color: #3385ff;
+}
+
+/**----------------------------地图数据查询结束-----------------------*/
+
+
+
+
+/**----------------------------风险源信息提示-----------------------*/
+#riskPop {
+    width: 343px;
+    border: 1px solid black;
+    padding-bottom: 10px;
+}
+
+    #riskPop .risk_title {
+        height: 31px;
+        border-bottom: 1px solid #ccc;
+        background-color: rgb(249, 249, 249);
+    }
+
+        #riskPop .risk_title .name {
+            position: absolute;
+            margin-top: 5px;
+            margin-left: 8px;
+            font: bold 14px 微软雅黑;
+        }
+
+        #riskPop .risk_title .tool {
+            height: 100%;
+            padding-right: 7px;
+            padding-top: 5px;
+        }
+
+            #riskPop .risk_title .tool a {
+                float: right;
+            }
+
+            #riskPop .risk_title .tool .risk_btn {
+                width: 16px;
+                height: 16px;
+                margin-right: 10px;
+                margin-top: 3px;
+            }
+
+            #riskPop .risk_title .tool .risk_alert {
+                background-image: url('images/alertData.png');
+            }
+
+            #riskPop .risk_title .tool .risk_video {
+                background-image: url('images/sxt_small.png');
+            }
+
+            #riskPop .risk_title .tool .risk_buffer {
+                background-image: url('images/buffer.gif');
+            }
+
+            #riskPop .risk_title .tool .risk_close {
+                margin-top: 5px;
+                width: 10px;
+                height: 10px;
+                background-image: url('images/iw_close.gif');
+            }
+
+    #riskPop .risk_top .banner {
+        margin-top: 10px;
+    }
+
+    #riskPop .risk_top .info {
+        margin-left: 5px;
+        margin-right: 5px;
+        font: 14px 微软雅黑;
+    }
+
+        #riskPop .risk_top .info table {
+            width: 100%;
+        }
+
+.coord {
+    position: absolute;
+    right: 170px;
+    z-index: 50;
+    bottom: 10px;
+    font: bold 12px 微软雅黑;
+}
+
+.coord_content {
+    right: 30px;
+}
+
+.map_scal {
+    position: absolute;
+    left: 9px;
+    z-index: 50;
+    bottom: 15px;
+    font-size: xx-small;
+}

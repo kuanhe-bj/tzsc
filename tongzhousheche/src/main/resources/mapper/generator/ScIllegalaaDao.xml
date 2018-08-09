@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.vas.dao.ScIllegalaaDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.renren.vas.entity.ScIllegalaaEntity" id="scIllegalaaMap">
+        <result property="id" column="id"/>
+        <result property="carnum" column="carNum"/>
+        <result property="illegal3month" column="illegal3Month"/>
+        <result property="illegal6month" column="illegal6Month"/>
+        <result property="illegal12month" column="illegal12Month"/>
+        <result property="illegaltotal" column="illegalTotal"/>
+        <result property="illegalabnormal" column="illegalAbnormal"/>
+    </resultMap>
+
+	<select id="queryObject" resultType="io.renren.vas.entity.ScIllegalaaEntity">
+		select * from sc_illegalaa where id = #{value}
+	</select>
+
+	<select id="queryList" resultType="io.renren.vas.entity.ScIllegalaaEntity">
+		select * from sc_illegalaa
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from sc_illegalaa 
+	</select>
+	 
+	<insert id="save" parameterType="io.renren.vas.entity.ScIllegalaaEntity">
+		insert into sc_illegalaa
+		(
+			`id`, 
+			`carNum`, 
+			`illegal3Month`, 
+			`illegal6Month`, 
+			`illegal12Month`, 
+			`illegalTotal`, 
+			`illegalAbnormal`
+		)
+		values
+		(
+			#{id}, 
+			#{carnum}, 
+			#{illegal3month}, 
+			#{illegal6month}, 
+			#{illegal12month}, 
+			#{illegaltotal}, 
+			#{illegalabnormal}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="io.renren.vas.entity.ScIllegalaaEntity">
+		update sc_illegalaa 
+		<set>
+			<if test="carnum != null">`carNum` = #{carnum}, </if>
+			<if test="illegal3month != null">`illegal3Month` = #{illegal3month}, </if>
+			<if test="illegal6month != null">`illegal6Month` = #{illegal6month}, </if>
+			<if test="illegal12month != null">`illegal12Month` = #{illegal12month}, </if>
+			<if test="illegaltotal != null">`illegalTotal` = #{illegaltotal}, </if>
+			<if test="illegalabnormal != null">`illegalAbnormal` = #{illegalabnormal}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from sc_illegalaa where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from sc_illegalaa where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

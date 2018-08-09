@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>车辆归属地分析</title>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+<link rel="stylesheet" href="../../css/bootstrap.min.css">
+<link rel="stylesheet" href="../../css/font-awesome.min.css">
+<link rel="stylesheet" href="../../plugins/jqgrid/ui.jqgrid-bootstrap.css">
+<link rel="stylesheet" href="../../plugins/ztree/css/metroStyle/metroStyle.css">
+<link rel="stylesheet" href="../../css/main.css">
+<script src="../../libs/jquery.min.js"></script>
+<script src="../../plugins/layer/layer.js"></script>
+<script src="../../libs/bootstrap.min.js"></script>
+<script src="../../libs/vue.min.js"></script>
+<script src="../../libs/validator.min.js"></script>
+<script src="../../plugins/jqgrid/grid.locale-cn.js"></script>
+<script src="../../plugins/jqgrid/jquery.jqGrid.min.js"></script>
+<script src="../../plugins/ztree/jquery.ztree.all.min.js"></script>
+<script src="../../js/common.js"></script>
+<script type="text/javascript" src="../../libs/ichart.1.2.min.js"></script> 
+<script>
+</script>
+</head>
+<body>
+<div id="rrapp" v-cloak >
+	<div v-show="showList">
+	    <div class="grid-btn">
+				<div class="form-group col-sm-2">
+					<input type="text" class="form-control" id="province" placeholder="省份">
+				</div>
+					<div class="form-group col-sm-2" id="div1"
+					style="width: 268px; height: 34px;">
+					<input type="text" class="form-control" id="entertime"
+						 name="entertime" readonly="readonly" onblur="SetQssj(this.value);" 
+						placeholder="开始时间">
+				</div>
+				<div class="form-group col-sm-2" id="div2"
+					style="width: 268px; height: 34px;">
+					<input type="text" class="form-control" id="exittime" readonly="readonly"
+						 name="exittime" onblur="SetJssj(this.value);" 
+						placeholder="结束时间">
+				</div>
+
+				<a class="btn btn-primary" @click="query"
+					style="background-color: #337ab7;">查询</a> <span id="msg"></span>
+		</div>
+	    <table id="jqGrid"></table>
+	    <div id="jqGridPager"></div>
+    </div>
+</div>
+<div id='canvasDiv'   style='border:1px solid #c3c3c3;margin-left:120px;width:800px;height:600px;'></div> 
+<div id='canvasDiv1' style='border:1px solid #c3c3c3;margin-left:120px;width:800px;height:700px;'></div> 
+<script src="../../js/modules/generator/scvehiclegs.js"></script>
+ <script src="../../vasMap/laydate-master/dist/laydate.js"></script>
+	<script>
+ 	laydate.render({
+ 		elem : '#entertime'
+ 	});
+ 	laydate.render({
+ 		elem : '#exittime'
+ 	});
+ 	function SetQssj(datas) {
+ 		//var entertime = $('#entertime').val();
+
+ 		var qssj = $('#entertime').val(datas);
+ 		
+ 	}
+ 	function SetJssj(datas) {
+		//var exittime = $('#exittime').val();
+		var jssj = $('#exittime').val(datas);
+ 		
+ 	}
+ 	
+
+ 	</script> 
+</body>
+</html>

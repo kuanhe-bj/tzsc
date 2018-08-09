@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title></title>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta
+	content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+	name="viewport">
+<link rel="stylesheet" href="../../css/bootstrap.min.css">
+<link rel="stylesheet" href="../../css/font-awesome.min.css">
+<link rel="stylesheet"
+	href="../../plugins/jqgrid/ui.jqgrid-bootstrap.css">
+<link rel="stylesheet"
+	href="../../plugins/ztree/css/metroStyle/metroStyle.css">
+<link rel="stylesheet" href="../../css/main.css">
+<script src="../../libs/jquery.min.js"></script>
+<script src="../../plugins/layer/layer.js"></script>
+<script src="../../libs/bootstrap.min.js"></script>
+<script src="../../libs/vue.min.js"></script>
+<script src="../../plugins/jqgrid/grid.locale-cn.js"></script>
+<script src="../../plugins/jqgrid/jquery.jqGrid.min.js"></script>
+<script src="../../plugins/ztree/jquery.ztree.all.min.js"></script>
+<script src="../../js/common.js"></script>
+<style type="text/css">
+</style>
+</head>
+<body>
+	<div id="rrapp" name="rrapp"  v-cloak>
+		<div v-show="showList">
+			<div class="grid-btn">
+<div class="form-group col-sm-2">
+					
+						<input type="text" class="form-control" id="btcxc" name="carNum" v-model="q.btcxc" placeholder="白天出现次数从" onblur="check()" />
+				</div>
+				<div class="form-group col-sm-2">
+					
+						<input type="text" class="form-control" id="btcxd" name="carNum" v-model="q.btcxd" placeholder="白天出现次数到" onblur="check()" />
+				</div>
+				<div class="form-group col-sm-2">
+					
+						<input type="text" class="form-control" id="wscxc" name="carNum" v-model="q.wscxc" placeholder="晚上出现次数从" onblur="check()" />
+				</div>
+				<div class="form-group col-sm-2">
+					
+						<input type="text" class="form-control" id="wscxd" name="carNum" v-model="q.wscxd" placeholder="晚上出现次数到" onblur="check()" />
+				</div>
+				<div class="form-group col-sm-2">
+					
+						<input type="text" class="form-control" id="fxc" name="carNum" v-model="q.fxc" placeholder="分析日期从" onblur="check()" readonly="readonly"/>
+				</div>
+				<div class="form-group col-sm-2">
+					
+						<input type="text" class="form-control" id="fxd" name="carNum" v-model="q.fxd" placeholder="分析日期到" onblur="check()" readonly="readonly"/>
+				</div>
+				<div class="form-group col-sm-2">
+					
+						<input type="text" class="form-control" id="btc" name="carNum" v-model="q.btc" placeholder="白天时间从" onblur="check()" readonly="readonly"/>
+				</div>
+				<div class="form-group col-sm-2">
+					
+						<input type="text" class="form-control" id="btd" name="carNum" v-model="q.btd" placeholder="白天时间到" onblur="check()" readonly="readonly"/>
+				</div>
+				<div class="form-group col-sm-2">
+					
+						<input type="text" class="form-control" id="ycc" name="carNum" v-model="q.ycc" placeholder="夜出时间从" onblur="check()" readonly="readonly"/>
+				</div>
+				<div class="form-group col-sm-2">
+					
+						<input type="text" class="form-control" id="ycd" name="carNum" v-model="q.ycd" placeholder="夜出时间到" onblur="check()" readonly="readonly"/>
+				</div>
+				
+				<button class="btn btn-primary" @click="query">按条件实时查询</button>
+				<button class="btn btn-primary" @click="qk">清空实时查询数据</button>
+				<button class="btn btn-primary" @click="dt">地图显示实时查询数据</button>
+				<span id="ms"></span>
+				
+
+			</div>
+			<table id="jqGrid"></table>
+			<div id="jqGridPager"></div>
+		</div>
+	</div>
+
+	<script src="../../js/modules/manager/zfyc_ss.js"></script>
+<!-- 	<script type="text/javascript"> -->
+// 		function check() {
+		
+// 		}
+<!-- 	</script> -->
+		<script src="../../vasMap/laydate-master/dist/laydate.js"></script>
+	<script>
+		laydate.render({
+			elem : '#fxc',
+			type : 'date'
+		});
+		laydate.render({
+			elem : '#fxd',
+			type : 'date'
+		});
+		laydate.render({
+			elem : '#btc',
+			type : 'time'
+		});
+		laydate.render({
+			elem : '#btd',
+			type : 'time'
+		});
+		laydate.render({
+			elem : '#ycc',
+			type : 'time'
+		});
+		laydate.render({
+			elem : '#ycd',
+			type : 'time'
+		});
+		//时间选择器
+//		laydate.render({
+//			elem : '#qssj',
+//			type : 'time'
+//		});
+	</script>
+</body>
+</html>

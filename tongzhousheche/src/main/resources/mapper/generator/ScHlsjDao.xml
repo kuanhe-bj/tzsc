@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.vas.dao.ScHlsjDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.renren.vas.entity.ScHlsjEntity" id="scHlsjMap">
+        <result property="checkinfoid" column="CHECKINFOID"/>
+        <result property="policemanid" column="POLICEMANID"/>
+        <result property="checktime" column="CHECKTIME"/>
+        <result property="checkyear" column="CHECKYEAR"/>
+        <result property="checkmonth" column="CHECKMONTH"/>
+        <result property="checkday" column="CHECKDAY"/>
+        <result property="checkaddress" column="CHECKADDRESS"/>
+        <result property="checkqu" column="CHECKQU"/>
+        <result property="checkjiedao" column="CHECKJIEDAO"/>
+        <result property="checkquname" column="CHECKQUNAME"/>
+        <result property="checkjiedaoname" column="CHECKJIEDAONAME"/>
+        <result property="checkpersoncardnumber" column="CHECKPERSONCARDNUMBER"/>
+        <result property="checkpersonname" column="CHECKPERSONNAME"/>
+        <result property="checkcarnumber" column="CHECKCARNUMBER"/>
+    </resultMap>
+
+	<select id="queryObject" resultType="io.renren.vas.entity.ScHlsjEntity">
+		select * from sc_hlsj where CHECKINFOID = #{value}
+	</select>
+
+    <select id="hlsjList" resultType="io.renren.vas.entity.ScHlsjEntity">
+		select * from sc_hlsj where CHECKCARNUMBER = #{cph} and CHECKTIME between #{startTime} and #{endTime}
+	</select>
+	
+	<select id="queryList" resultType="io.renren.vas.entity.ScHlsjEntity">
+		select * from sc_hlsj
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by CHECKINFOID desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{limit} offset #{offset}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from sc_hlsj 
+	</select>
+	 
+	<insert id="save" parameterType="io.renren.vas.entity.ScHlsjEntity">
+		insert into sc_hlsj
+		(
+			CHECKINFOID, 
+			POLICEMANID, 
+			CHECKTIME, 
+			CHECKYEAR, 
+			CHECKMONTH, 
+			CHECKDAY, 
+			CHECKADDRESS, 
+			CHECKQU, 
+			CHECKJIEDAO, 
+			CHECKQUNAME, 
+			CHECKJIEDAONAME, 
+			CHECKPERSONCARDNUMBER, 
+			CHECKPERSONNAME, 
+			CHECKCARNUMBER
+		)
+		values
+		(
+		
+			#{checkinfoid},
+			#{policemanid}, 
+			#{checktime}, 
+			#{checkyear}, 
+			#{checkmonth}, 
+			#{checkday}, 
+			#{checkaddress}, 
+			#{checkqu}, 
+			#{checkjiedao}, 
+			#{checkquname}, 
+			#{checkjiedaoname}, 
+			#{checkpersoncardnumber}, 
+			#{checkpersonname}, 
+			#{checkcarnumber}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="io.renren.vas.entity.ScHlsjEntity">
+		update sc_hlsj 
+		<set>
+			<if test="policemanid != null">POLICEMANID = #{policemanid}, </if>
+			<if test="checktime != null">CHECKTIME = #{checktime}, </if>
+			<if test="checkyear != null">CHECKYEAR = #{checkyear}, </if>
+			<if test="checkmonth != null">CHECKMONTH = #{checkmonth}, </if>
+			<if test="checkday != null">CHECKDAY = #{checkday}, </if>
+			<if test="checkaddress != null">CHECKADDRESS = #{checkaddress}, </if>
+			<if test="checkqu != null">CHECKQU = #{checkqu}, </if>
+			<if test="checkjiedao != null">CHECKJIEDAO = #{checkjiedao}, </if>
+			<if test="checkquname != null">CHECKQUNAME = #{checkquname}, </if>
+			<if test="checkjiedaoname != null">CHECKJIEDAONAME = #{checkjiedaoname}, </if>
+			<if test="checkpersoncardnumber != null">CHECKPERSONCARDNUMBER = #{checkpersoncardnumber}, </if>
+			<if test="checkpersonname != null">CHECKPERSONNAME = #{checkpersonname}, </if>
+			<if test="checkcarnumber != null">CHECKCARNUMBER = #{checkcarnumber}</if>
+		</set>
+		where CHECKINFOID = #{checkinfoid}
+	</update>
+	
+	<delete id="delete">
+		delete from sc_hlsj where CHECKINFOID = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from sc_hlsj where CHECKINFOID in 
+		<foreach item="checkinfoid" collection="array" open="(" separator="," close=")">
+			#{checkinfoid}
+		</foreach>
+	</delete>
+
+</mapper>

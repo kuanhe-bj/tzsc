@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title></title>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta
+	content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+	name="viewport">
+<link rel="stylesheet" href="../../css/bootstrap.min.css">
+<link rel="stylesheet" href="../../css/font-awesome.min.css">
+<link rel="stylesheet"
+	href="../../plugins/jqgrid/ui.jqgrid-bootstrap.css">
+<link rel="stylesheet"
+	href="../../plugins/ztree/css/metroStyle/metroStyle.css">
+<link rel="stylesheet" href="../../css/main.css">
+<script src="../../libs/jquery.min.js"></script>
+<script src="../../plugins/layer/layer.js"></script>
+<script src="../../libs/bootstrap.min.js"></script>
+<script src="../../libs/vue.min.js"></script>
+<script src="../../plugins/jqgrid/grid.locale-cn.js"></script>
+<script src="../../plugins/jqgrid/jquery.jqGrid.min.js"></script>
+<script src="../../plugins/ztree/jquery.ztree.all.min.js"></script>
+<script src="../../js/common.js"></script>
+</head>
+<body>
+	<div id="rrapp" v-cloak>
+		<div v-show="showList">
+			<div class="grid-btn">
+				<div class="form-group col-sm-2">
+					<input type="text" class="form-control" id="cp" v-model="q.cp"
+						@keyup.enter="query" placeholder="车牌号" onblur="check()">
+
+				</div>
+				<div class="form-group col-sm-2">
+					<input type="text" class="form-control" id="xm" v-model="q.xm"
+						@keyup.enter="query" placeholder="姓名" onblur="check1()">
+
+				</div>
+				<div class="form-group col-sm-2">
+					<input type="text" class="form-control" id="sfz" v-model="q.sfz"
+						@keyup.enter="query" placeholder="身份证" onblur="check2()">
+
+				</div>
+				<a class="btn btn-primary" @click="query"
+					style="background-color: #337ab7;">查询</a>
+<!-- 				<input type="button" name="Submit" id="back" class="btn btn-warning"
+		   			   onclick="javascript:history.back(-1);" value="返回上一页">  -->
+		   		<span id="msg"></span>
+			</div>
+			<table id="jqGrid"></table>
+			<div id="jqGridPager"></div>
+		</div>
+	</div>
+
+	<script src="../../js/modules/generator/sc_rcgls.js"></script>
+	<script type="text/javascript">
+		function check() {
+			var cp = $("#cp").val();
+			if (cp.length >= 10) {
+				$("#msg").css("color", "red");
+				$("#msg").html("输入长度不超过10个字符！");
+			} else if (cp == "") {
+				$("#msg").css("color", "red");
+				$("#msg").html("请输入车牌号！");
+			} else {
+				$("#msg").css("color", "green");
+				$("#msg").html("输入符合规范！");
+			}
+		}
+
+		function check1() {
+			var xm = $("#xm").val();
+			if (xm.length >= 50) {
+				$("#msg").css("color", "red");
+				$("#msg").html("输入长度不超过50个字符！");
+			} else if (xm == "") {
+				$("#msg").css("color", "red");
+				$("#msg").html("请输入姓名！");
+			} else {
+				$("#msg").css("color", "green");
+				$("#msg").html("输入符合规范！");
+			}
+		}
+
+		function check2() {
+			var sfz = $("#sfz").val();
+			var reg = /^[\d]{17}[x|X|0-9]$/;
+
+			if (reg.test(sfz)) {
+				$("#msg").css("color", "green");
+				$("#msg").html("输入符合规范！");
+			} else {
+				$("#msg").css("color", "red");
+				$("#msg").html("输入长度需18个字符，并符合身份证规则！");
+			}
+		}
+	</script>
+</body>
+</html>

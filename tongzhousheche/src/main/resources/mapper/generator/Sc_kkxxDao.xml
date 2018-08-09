@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.vas.dao.Sc_kkxxDao">
+
+	<select id="findKkxx" resultType="io.renren.vo.KakouRecordVo">
+		select
+		count(*) as number,
+		kk.ID
+		as id,
+		kk.MC as mc,
+		jb.CPH as cph,
+		et.SJLY as sjly,
+		#{start} as startTime,
+		#{end} as endTime
+		from
+		sc_kkxx kk join sc_kkjbxx113 jb
+		on kk.ID = jb.KDID
+		join sc_etcptjd et
+		on jb.CPH=et.CAR_NUMBER
+		where
+		jb.KDID=#{kid} and
+		jb.PSSJ between #{start} and #{end}
+	</select>
+
+	<select id="find" resultType="io.renren.vo.KakouRecordVo">
+		select
+		count(*) as number,
+		kk.ID as
+		id,
+		kk.MC as mc,
+		jb.CPH as cph,
+		et.SJLY as sjly,
+		#{start} as startTime,
+		#{end} as endTime
+		from
+		sc_kkxx kk join sc_kkjbxx113 jb
+		on kk.ID = jb.KDID
+		join sc_etcptjd et
+		on jb.CPH=et.CAR_NUMBER
+		where
+		jb.KDID=#{kid} and
+		jb.PSSJ between #{start} and #{end}
+	</select>
+
+	<select id="checkList" resultType="io.renren.vo.KakouRecordVo">
+		select * from sc_etcptjd
+		where CAR_NUMBER = #{cph}
+		ENTER_TIME between #{start} and #{end}
+	</select>
+
+	<select id="list" resultType="io.renren.vo.KakouRecordVo">
+		SELECT a.*
+		from (SELECT * ,COUNT(*) as num
+		FROM sc_etcptjd
+		GROUP BY CAR_NUMBER)
+		a
+		WHERE a.CAR_NUMBER=#{cph}
+	</select>
+
+	<select id="checkKkbs" resultType="io.renren.vo.KakoubsVo">
+		select
+		k1.CAR_NUMBER as cph1,
+		k1.ENTER_TIME as pssj1,
+		k1.DISTRICT_NM_ID as kdid,
+		k2.ENTER_TIME as pssj2,
+		k2.CAR_NUMBER as cph2
+		from
+		sc_etcptjd k1
+		join sc_etcptjd k2
+		where
+		k1.CAR_NUMBER != #{cph}
+		AND
+		k1.ENTER_TIME between #{start} and #{end}
+		group by k1.CAR_NUMBER
+	</select>
+
+</mapper>

@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.vas.dao.ScDtcldzdanDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+	<resultMap type="io.renren.vas.entity.ScDtcldzdanEntity" id="scDtcldzdanMap">
+		<result property="id" column="id"/>
+		<result property="plate" column="plate"/>
+		<result property="owner" column="owner"/>
+		<result property="color" column="color"/>
+		<result property="brand" column="brand"/>
+		<result property="model" column="model"/>
+		<result property="abnormal" column="abnormal"/>
+		<result property="violation" column="violation"/>
+		<result property="nightout" column="nightOut"/>
+		<result property="highrisk" column="highrisk"/>
+		<result property="accident" column="accident"/>
+		<result property="hidden" column="hidden"/>
+		<result property="isfake" column="isFake"/>
+		<result property="isindoubt" column="isInDoubt"/>
+		<result property="isinvolved" column="isInvolved"/>
+		<result property="issuspects" column="isSuspects"/>
+		<result property="isfirstin" column="isFirstIn"/>
+		<result property="times" column="times"/>
+		<result property="limits" column="limits"/>
+		<result property="summary" column="summary"/>
+		<result property="onlyenter" column="onlyEnter"/>
+		<result property="overspeed" column="overSpeed"/>
+		<result property="contviolation" column="ContViolation"/>
+		<result property="abtravel" column="abTravel"/>
+		<result property="wander" column="wander"/>
+		<result property="efence" column="efence"/>
+		<result property="multiplate" column="multiPlate"/>
+		<result property="sfz" column="sfz"/>
+	</resultMap>
+
+	<select id="queryObject" resultType="io.renren.vas.entity.ScDtcldzdanEntity">
+		select * from sc_dtcldzdan where id = #{value}
+	</select>
+
+	<select id="queryList" resultType="io.renren.vas.entity.ScDtcldzdanEntity">
+		select * from sc_dtcldzdan
+		<choose>
+			<when test="sidx != null and sidx.trim() != ''">
+				order by ${sidx} ${order}
+			</when>
+			<otherwise>
+				order by id desc
+			</otherwise>
+		</choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+	<select id="queryTotal" resultType="int">
+		select count(*) from sc_dtcldzdan
+	</select>
+
+	<insert id="save" parameterType="io.renren.vas.entity.ScDtcldzdanEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into sc_dtcldzdan
+		(
+		`plate`,
+		`owner`,
+		`color`,
+		`brand`,
+		`model`,
+		`abnormal`,
+		`violation`,
+		`nightOut`,
+		`highrisk`,
+		`accident`,
+		`hidden`,
+		`isFake`,
+		`isInDoubt`,
+		`isInvolved`,
+		`isSuspects`,
+		`isFirstIn`,
+		`times`,
+		`limits`,
+		`summary`,
+		`onlyEnter`,
+		`overSpeed`,
+		`ContViolation`,
+		`abTravel`,
+		`wander`,
+		`efence`,
+		`multiPlate`,
+		`sfz`
+		)
+		values
+		(
+		#{plate},
+		#{owner},
+		#{color},
+		#{brand},
+		#{model},
+		#{abnormal},
+		#{violation},
+		#{nightout},
+		#{highrisk},
+		#{accident},
+		#{hidden},
+		#{isfake},
+		#{isindoubt},
+		#{isinvolved},
+		#{issuspects},
+		#{isfirstin},
+		#{times},
+		#{limits},
+		#{summary},
+		#{onlyenter},
+		#{overspeed},
+		#{contviolation},
+		#{abtravel},
+		#{wander},
+		#{efence},
+		#{multiplate},
+		#{sfz}
+		)
+	</insert>
+
+	<update id="update" parameterType="io.renren.vas.entity.ScDtcldzdanEntity">
+		update sc_dtcldzdan
+		<set>
+			<if test="plate != null">`plate` = #{plate}, </if>
+			<if test="owner != null">`owner` = #{owner}, </if>
+			<if test="color != null">`color` = #{color}, </if>
+			<if test="brand != null">`brand` = #{brand}, </if>
+			<if test="model != null">`model` = #{model}, </if>
+			<if test="abnormal != null">`abnormal` = #{abnormal}, </if>
+			<if test="violation != null">`violation` = #{violation}, </if>
+			<if test="nightout != null">`nightOut` = #{nightout}, </if>
+			<if test="highrisk != null">`highrisk` = #{highrisk}, </if>
+			<if test="accident != null">`accident` = #{accident}, </if>
+			<if test="hidden != null">`hidden` = #{hidden}, </if>
+			<if test="isfake != null">`isFake` = #{isfake}, </if>
+			<if test="isindoubt != null">`isInDoubt` = #{isindoubt}, </if>
+			<if test="isinvolved != null">`isInvolved` = #{isinvolved}, </if>
+			<if test="issuspects != null">`isSuspects` = #{issuspects}, </if>
+			<if test="isfirstin != null">`isFirstIn` = #{isfirstin}, </if>
+			<if test="times != null">`times` = #{times}, </if>
+			<if test="limits != null">`limits` = #{limits}, </if>
+			<if test="summary != null">`summary` = #{summary}, </if>
+			<if test="onlyenter != null">`onlyEnter` = #{onlyenter}, </if>
+			<if test="overspeed != null">`overSpeed` = #{overspeed}, </if>
+			<if test="contviolation != null">`ContViolation` = #{contviolation}, </if>
+			<if test="abtravel != null">`abTravel` = #{abtravel}, </if>
+			<if test="wander != null">`wander` = #{wander}, </if>
+			<if test="efence != null">`efence` = #{efence}, </if>
+			<if test="multiplate != null">`multiPlate` = #{multiplate}, </if>
+			<if test="sfz != null">`sfz` = #{sfz}</if>
+		</set>
+		where id = #{id}
+	</update>
+
+	<delete id="delete">
+		delete from sc_dtcldzdan where id = #{value}
+	</delete>
+
+	<delete id="deleteBatch">
+		delete from sc_dtcldzdan where id in
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>
