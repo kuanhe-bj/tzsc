@@ -3,14 +3,22 @@ spring:
         type: com.alibaba.druid.pool.DruidDataSource
         driverClassName: org.postgresql.Driver
         druid:
+#            first:
+#                url: jdbc:postgresql://tz-tingjiandan.dws.huaweicloud.com:8000/vas_b
+#                username: usr_vas_b
+#                password: dbadmin@123
+#            second:
+#                url: jdbc:postgresql://tz-tingjiandan.dws.huaweicloud.com:8000/vas_b
+#                username: usr_vas_b
+#                password: dbadmin@123
             first:
-                url: jdbc:postgresql://tz-tingjiandan.dws.huaweicloud.com:8000/vas_b
-                username: usr_vas_b
-                password: dbadmin@123
+                url: jdbc:postgresql://localhost:5432/tzsc
+                username: kuanhe
+                password: kuanhe@123
             second:
-                url: jdbc:postgresql://tz-tingjiandan.dws.huaweicloud.com:8000/vas_b
-                username: usr_vas_b
-                password: dbadmin@123
+                url: jdbc:postgresql://localhost:5432/tzsc
+                username: kuanhe
+                password: kuanhe@123
             initial-size: 10
             max-active: 100
             min-idle: 10
@@ -37,7 +45,7 @@ spring:
                     config:
                         multi-statement-allow: true
     redis:
-        open: true  # 是否开启redis缓存  true开启   false关闭
+        open: false  # true  # 是否开启redis缓存  true开启   false关闭
         database: 0
         host: 192.168.99.101
         port: 6379
