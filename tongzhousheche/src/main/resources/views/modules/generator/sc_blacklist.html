@@ -28,6 +28,9 @@
 		<div v-show="showList">
 			<div class="grid-btn" style="margin: 10px;">
 
+				<div class="form-group col-sm-1">
+					<label style="font-size: medium">车牌号：</label>
+				</div>
 				<div class="form-group col-sm-2">
 					<input type="text" class="form-control" id="carNum" placeholder="车牌号 " onblur="check()" />
 				</div>
@@ -35,6 +38,16 @@
 				<button class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</button>
 				<button class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</button>
 				<span id="msg"></span>
+
+				<div class="panel-body">
+					<form role="form" action= "/vas/importExcel" method="post" enctype="multipart/form-data">
+						<div class="form-group col-sm-2">
+							<input type="file" id="exampleInputFile" name="myfile" />
+						</div>
+						<button type="submit" class="btn btn-primary">导入</button>
+					</form>
+				</div>
+
 			</div>
 			<table id="jqGrid"></table>
 			<div id="jqGridPager"></div>
@@ -88,6 +101,8 @@
 		function SetQssj(datas) {
 			var qssj = $('#createtime').val(datas);
 		}
+
+
 	</script>
 </body>
 </html>

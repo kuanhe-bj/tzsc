@@ -33,30 +33,45 @@
 	<div id="rrapp" v-cloak>
 		<div>
 			<div class="grid-btn">
+				<div class="form-group col-sm-1">
+					<label style="font-size: medium">车牌号:</label>
+				</div>
 				<div class="form-group col-sm-2">
 					<input type="text" class="form-control" id="cph" 
 						placeholder="车牌号" onblur="check()"/>
+				</div>
+				<div class="form-group col-sm-1">
+					<label style="font-size: medium">起始时间:</label>
 				</div>
 				<div class="form-group col-sm-2">
 					<input type="text" class="form-control" id="startTime"
 						placeholder="起始时间  请选择日期" onblur="SetQssj(this.value)"/>
 				</div>
+				<div class="form-group col-sm-1">
+					<label style="font-size: medium">结束时间:</label>
+				</div>
 				<div class="form-group col-sm-2">
 					<input type="text" class="form-control" id="endTime"
 						placeholder="结束时间  请选择日期" onblur="SetJssj(this.value)"/>
+				</div>
+				<div class="form-group col-sm-1">
+					<label style="font-size: medium">伴随次数:</label>
 				</div>
 				<div class="form-group col-sm-2">
 					<input type="text" class="form-control" id="num"
 						placeholder="伴随次数 (（默认为2）)"  />
 				</div>
+				<div class="form-group col-sm-1">
+					<label style="font-size: medium">伴随时间:</label>
+				</div>
 				<div class="form-group col-sm-2">
 					<input type="text" class="form-control" id="time"
 						placeholder="伴随时间(分钟（默认为10）)"  />
 				</div>
-				<div class="form-group col-sm-2">
-					<input id="receiver" type="text" class="form-control" placeholder="目标用户" />
-				</div> 
-				<button style="margin-left:12px;" class="btn btn-primary" @click="alarm">推送按钮</button>
+				<!--<div class="form-group col-sm-2">-->
+					<!--<input id="receiver" type="text" class="form-control" placeholder="目标用户" />-->
+				<!--</div> -->
+				<!--<button style="margin-left:12px;" class="btn btn-primary" @click="alarm">推送按钮</button>-->
 				<a id="show" class="btn btn-primary" @click="find">伴随分析</a>
 <!-- 				<span id="msg"></span><br/>  -->
 <!-- 				<audio id="audio" src="../../images/main/13.wav"></audio> -->
