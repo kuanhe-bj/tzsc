@@ -28,5 +28,6 @@ public interface Sc_colorDao {
 	
 	@Select("SELECT * FROM sc_model ")
 	List<Model> getModel();
-	
+
+
 }

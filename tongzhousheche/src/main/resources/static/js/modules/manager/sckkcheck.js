@@ -1,7 +1,7 @@
 var ss=null;
 var ph="" ;
 var t1=getDate(0);
-var t2=getBeforeDate(0);
+var t2=getBeforeDate(0);brand
 var qs= sessionStorage.getItem("qs");
 var js= sessionStorage.getItem("js");
 var pa= sessionStorage.getItem("pag");

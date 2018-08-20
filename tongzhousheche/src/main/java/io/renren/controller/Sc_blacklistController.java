@@ -168,7 +168,15 @@ public class Sc_blacklistController extends AbstractController {
 
 		return R.ok().put("list", list);
 	}
-	
+	/*
+	*车辆品牌搜索
+	 */
+	@RequestMapping("/pinp")
+	public R pinp() {
+		List<Brand> ScKkxxList=sc_colorService.getBrand();
+
+		return R.ok().put("list", ScKkxxList);
+	}
 	@RequestMapping("/model")
 	public R model() {
 

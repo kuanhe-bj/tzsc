@@ -21,5 +21,6 @@ public interface Sc_colorService {
 	List<Brand> getBrand();
 	
 	List<Model> getModel();
-	
+
+
 }

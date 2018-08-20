@@ -6,6 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
 <link rel="stylesheet" href="../../css/bootstrap.min.css">
+	<link rel="stylesheet" href="../../css/jquery-ui.css">
 <link rel="stylesheet" href="../../css/font-awesome.min.css">
 <link rel="stylesheet" href="../../plugins/jqgrid/ui.jqgrid-bootstrap.css">
 <link rel="stylesheet" href="../../plugins/ztree/css/metroStyle/metroStyle.css">
@@ -13,18 +14,38 @@
 <script src="../../libs/jquery.min.js"></script>
 <script src="../../plugins/layer/layer.js"></script>
 <script src="../../libs/bootstrap.min.js"></script>
-<script src="../../libs/vue.min.js"></script>
+	<script src="../../libs/vue.min.js"></script>
+	<script src="../../libs/jquery-ui.js"></script>
+	<script src="../../libs/jquery-ui.min.js"></script>
 <script src="../../libs/validator.min.js"></script>
 <script src="../../plugins/jqgrid/grid.locale-cn.js"></script>
 <script src="../../plugins/jqgrid/jquery.jqGrid.min.js"></script>
 <script src="../../plugins/ztree/jquery.ztree.all.min.js"></script>
 <script src="../../js/common.js"></script>
 <script src="../../libs/router.js"></script>
+
  <style type ="text/css">
  .kuandu{
  width:190px;
  }
- 
+ .custom-combobox {
+     position: relative;
+     display: inline-block;
+ }
+ .custom-combobox-toggle {
+     position: absolute;
+     top: 0;
+     bottom: 0;
+     margin-left: -1px;
+     padding: 0;
+     /* 支持： IE7 */
+     *height: 1.7em;
+     *top: 0.1em;
+ }
+ .custom-combobox-input {
+     margin: 0;
+     padding: 0.3em;
+ }
  </style>
 </head>
 <body>
@@ -39,6 +60,7 @@
 				<select id="brand" class="moreChoose" style="width:160px;">
 			 		<option value ="">车辆品牌</option>
 			     </select>
+				<!--<input id="brand" class="form-control" placeholder="车辆品牌">-->
 			</div>
 <!-- 			<div class="form-group col-sm-2 kuandu" > -->
 <!-- 				<input type="text" class="form-control" id="qclass" v-model="q.qclass" @keyup.enter="query" placeholder="车辆类型"> -->
@@ -106,16 +128,19 @@
 <script src="../../js/modules/manager/sckkcheck.js"></script>
  <script src="../../vasMap/laydate-master/dist/laydate.js"></script>
  <script language="javascript" type="text/javascript">
+
         $(function() {
+            //kaName();
+            ppName();
         //  轨迹回放
         	$("#back").click(function () {
         		 var carNum=$(this).val("data");
 //         		 开始时间
         		 var startTime=$("#startTime").val();
-        	
+
 //         		 结束时间
         		 var endTime=$("#endTime").val();
-        		
+
         		 parent.sayhello("vasMap/views/scguijitu.html",carNum,startTime,endTime);
         	});
         	var chepai=parent.cph;
@@ -131,7 +156,7 @@
         				elem : '#startTime',
         				value: t1,
         				type: 'datetime'
-        			
+
         			});
         			laydate.render({
         				elem : '#endTime',
@@ -143,7 +168,7 @@
         				elem : '#startTime',
         				value: qs,
         				type: 'datetime'
-        			
+
         			});
         			laydate.render({
         				elem : '#endTime',
@@ -152,6 +177,136 @@
         			});
         	 }
         });
+        function ppName() {
+            var url = "generator/sc_blacklist/pinp";
+            $.ajax({
+                type : "POST",
+                url : baseURL + url,
+                contentType : "application/json",
+                success : function(obj) {
+                    var list = obj.list;
+                 var availableBrand = [];
+                    for (var i = 0; i < list.length; i++) {
+                        // brandObject.contact=list[i].contact;
+                        // brandObject.value=list[i].value;
+
+                        var  brandObject  ={ label: list[i].contact, value: list[i].value};
+                        availableBrand.push(brandObject);
+                      //  availableBrand[i] = list[i].contact+list[i].value;
+                    }
+
+                    $("#brand").autocomplete({
+                        source :availableBrand
+                    });
+                }
+            });
+        }
+
+        // (function( $ ) {
+        //     $.widget( "custom.combobox", {
+        //         _create: function() {
+        //             this.wrapper = $( "<span>" )
+        //                 .addClass( "custom-combobox" )
+        //                 .insertAfter( this.element );
+        //
+        //             this.element.hide();
+        //             this._createAutocomplete();
+        //
+        //         },
+        //
+        //         _createAutocomplete: function() {
+        //             var selected = this.element.children( ":selected" ),
+        //                 value = selected.val() ? selected.text() : "";
+        //                 alert(value);
+        //             this.input = $( "<input>" )
+        //                 .appendTo( this.wrapper )
+        //                 .val( value )
+        //                 .attr( "title", "" )
+        //                 .addClass( "custom-combobox-input ui-widget ui-widget-content ui-state-default ui-corner-left" )
+        //                 .autocomplete({
+        //                     delay: 0,
+        //                     minLength: 0,
+        //                     source: $.proxy( this, "_source" )
+        //                 })
+        //                 .tooltip({
+        //                     tooltipClass: "ui-state-highlight"
+        //                 });
+        //
+        //             this._on( this.input, {
+        //                 autocompleteselect: function( event, ui ) {
+        //                     ui.item.option.selected = true;
+        //                     this._trigger( "select", event, {
+        //                         item: ui.item.option
+        //                     });
+        //                 },
+        //
+        //                 autocompletechange: "_removeIfInvalid"
+        //             });
+        //         },
+        //
+        //
+        //
+        //         _source: function( request, response ) {
+        //             var matcher = new RegExp( $.ui.autocomplete.escapeRegex(request.term), "i" );
+        //             response( this.element.children( "option" ).map(function() {
+        //                 var text = $( this ).text();
+        //                 if ( this.value && ( !request.term || matcher.test(text) ) )
+        //                     return {
+        //                         label: text,
+        //                         value: text,
+        //                         option: this
+        //                     };
+        //             }) );
+        //         },
+        //
+        //         _removeIfInvalid: function( event, ui ) {
+        //
+        //             // 选择一项，不执行其他动作
+        //             if ( ui.item ) {
+        //                 return;
+        //             }
+        //
+        //             // 搜索一个匹配（不区分大小写）
+        //             var value = this.input.val(),
+        //                 valueLowerCase = value.toLowerCase(),
+        //                 valid = false;
+        //             this.element.children( "option" ).each(function() {
+        //                 if ( $( this ).text().toLowerCase() === valueLowerCase ) {
+        //                     this.selected = valid = true;
+        //                     return false;
+        //                 }
+        //             });
+        //
+        //             // 找到一个匹配，不执行其他动作
+        //             if ( valid ) {
+        //                 return;
+        //             }
+        //
+        //             // 移除无效的值
+        //             this.input
+        //                 .val( "" )
+        //                 .attr( "title", value + " didn't match any item" )
+        //                 .tooltip( "open" );
+        //             this.element.val( "" );
+        //             this._delay(function() {
+        //                 this.input.tooltip( "close" ).attr( "title", "" );
+        //             }, 2500 );
+        //             this.input.data( "ui-autocomplete" ).term = "";
+        //         },
+        //
+        //         _destroy: function() {
+        //             this.wrapper.remove();
+        //             this.element.show();
+        //         }
+        //     });
+        // })( jQuery );
+        //
+        // $(function() {
+        //     $( "#brand" ).combobox();
+        //
+        // });
+
+
     </script>
 </body>
 </html>

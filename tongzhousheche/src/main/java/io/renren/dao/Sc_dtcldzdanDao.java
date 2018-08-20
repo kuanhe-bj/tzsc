@@ -125,7 +125,7 @@ public interface Sc_dtcldzdanDao extends BaseDao<ScDtcldzdanEntity> {
 	
 	@Update("update sc_dtcldzdan set contViolation=0")
 	int updateContViolation();
-	
+
 	//连续违章分析end
 	
 	@Select("select * from sc_dtcldzdan GROUP BY plate,id ")
