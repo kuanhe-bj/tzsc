@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.locks.ReentrantLock;
 
+import io.renren.vas.entity.Coordinate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -154,7 +155,13 @@ public class ETCPService {
 	}
 
 	public List<ScKkxxEntity> kakouByTags(String tags) {
-		
+
 		return scETCPDao.kakouByTags(tags);
 	}
+    public List<Coordinate>SearchEtcpMc(){
+        return scETCPDao.SearchEtcpMc();
+    }
+    public List<Coordinate>SearchEtcpAddress(String address){
+        return scETCPDao.SearchEtcpAddress(address);
+    }
 }

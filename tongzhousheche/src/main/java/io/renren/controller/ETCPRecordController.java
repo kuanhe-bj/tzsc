@@ -5,6 +5,7 @@ import io.renren.common.utils.Query;
 import io.renren.common.utils.R;
 import io.renren.modules.sys.entity.SysUserEntity;
 import io.renren.service.ETCPService;
+import io.renren.vas.entity.Coordinate;
 import io.renren.vas.entity.ScKkxxEntity;
 import io.renren.vo.ScEtcpEntity;
 import lombok.extern.slf4j.Slf4j;
@@ -65,6 +66,7 @@ public class ETCPRecordController {
             params.remove("park");
         }
         String address = (String) params.get("address");
+        System.out.println("----------------------------"+address);
         if (!StringUtils.isNotBlank(address)) {
             params.remove("address");
         }
@@ -113,6 +115,7 @@ public class ETCPRecordController {
             params.remove("model");
         }
         String brand = (String) params.get("brand");
+        System.out.println("---------------"+brand);
         if (!StringUtils.isNotBlank(brand)) {
             params.remove("brand");
         }
@@ -448,5 +451,15 @@ public class ETCPRecordController {
     	
     	return R.ok().put("list", ScKkxxList);
     }
-
+    /**
+     * 停车场名称搜索
+     *
+     * @param params
+     * @return
+     */
+    @RequestMapping("/SearchEtcpMc")
+    public R SearchEtcpMc(){
+        List<Coordinate>SearchEtcpMcList=scETCPService.SearchEtcpMc();
+        return R.ok().put("list",SearchEtcpMcList);
+    }
 }

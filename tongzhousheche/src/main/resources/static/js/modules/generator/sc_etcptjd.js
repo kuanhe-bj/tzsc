@@ -8,10 +8,12 @@ var wd;
 var adress;
 var url = '';
 var carNum = $("#carNum").val();
+alert(carNum);
 $(function () {
 	var carnum = sessionStorage.getItem("carNum");
 	var start = sessionStorage.getItem("start");
 	var end = sessionStorage.getItem("end");
+
 	if(carnum != null && carnum != "" && carnum != undefined) {
 		url += baseURL +"generator/sc_etcptjd/find?carNum=" + carnum + "&start=" + start + "&end=" + end;
 		$("#cph").val(carnum);

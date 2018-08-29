@@ -167,6 +167,7 @@ var js= sessionStorage.getItem("js");
                 }
             });
             colors();
+      		brand();
         });
   function  colors(){
 		var url = 'generator/sc_blacklist/color';
@@ -251,18 +252,36 @@ var vm = new Vue({
 			var safetyBelt =$("#safetyBelt").val();
 			var calling =$("#calling").val();
 			var infoKind =$("#infoKind").val();
+            var brand =$("#brand").val();
 			var tags =$("#tags").val();
 			var color =$("#color").val();
 			var page = $("#jqGrid").jqGrid('getGridParam','page');
 			ph="etcp/moHuList";
 			$("#jqGrid").jqGrid('setGridParam',{ 
 				url:baseURL  +ph,
-                postData:{'cph': cph,'numOfPassenger': vm.q.numOfPassenger,'tags':tags,'qssj':sTime,'jssj':eTime,'speed': vm.q.speed,'color':color,'model':vm.q.model,'brand':vm.q.brand,'qclass':vm.q.qclass,'infoKind':infoKind,'pclass':vm.q.pclass,'paltecolor':paltecolor,'safetyBelt':safetyBelt,'calling':calling},
+                postData:{'cph': cph,'numOfPassenger': vm.q.numOfPassenger,'tags':tags,'qssj':sTime,'jssj':eTime,'speed': vm.q.speed,'color':color,'model':vm.q.model,'brand':brand,'qclass':vm.q.qclass,'infoKind':infoKind,'pclass':vm.q.pclass,'paltecolor':paltecolor,'safetyBelt':safetyBelt,'calling':calling},
                 page:1
             }).trigger("reloadGrid");
 		},
 	}
 });
+function  brand(){
+    var url = 'generator/sc_blacklist/brand';
+
+    $.ajax({
+        type : "POST",
+        url : baseURL + url,
+        contentType : "application/json",
+        success : function(obj) {
+            for(var i = 0;i < obj.list.length; i++) {
+                var opt = $("<option></option>");
+                opt.attr("value",obj.list[i].value);
+                opt.text(obj.list[i].contact);
+                $("#brand").append(opt);
+            }
+        }
+    });
+}
 
 function getDate(n){  
     var n = n;  

@@ -25,7 +25,8 @@ public interface Sc_etcptjdDao extends BaseDao<ScEtcptjdEntity> {
 	@Select("<script>" 
 		  + " select car_number,jingdu,weidu,count(eid) as count,adress from sc_etcptjd " 
 		  + " where CAR_NUMBER = #{carNum} "
-		  + " AND ENTER_TIME BETWEEN #{start} AND #{end} " 
+		 /* + " AND ENTER_TIME BETWEEN #{start} AND #{end} "*/
+			+ " AND ENTER_TIME BETWEEN '${start}' AND '${end}' "
 		  + " group by jingdu,weidu,car_number,adress "
 		  + "<choose>"
 		  + "  <when test='sidx.trim() !=\"\"  and  sidx != null' >" 
@@ -65,7 +66,8 @@ public interface Sc_etcptjdDao extends BaseDao<ScEtcptjdEntity> {
 	
 	@Select("select count(eid) as count from sc_etcptjd "
 		  + "WHERE CAR_NUMBER = #{carNum} "
-		  + "AND ENTER_TIME BETWEEN #{start} AND #{end} "
+		/*  + "AND ENTER_TIME BETWEEN #{start} AND #{end} "*/
+			+ " AND ENTER_TIME BETWEEN '${start}' AND '${end}' "
 		  + "group by jingdu,weidu,car_number,adress ")
 	List<ScEtcptjdEntity> total(Map<String, Object> map);
 	

@@ -3,6 +3,7 @@ package io.renren.dao;
 import java.util.List;
 import java.util.Map;
 
+import io.renren.vas.entity.Coordinate;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
@@ -149,7 +150,9 @@ public interface ScETCPDao extends BaseDao<ScEtcptjdEntity> {
 			+ " AND VehicleModel in (SELECT value FROM sc_model WHERE model like '%${model}%')"
 			+ "</if>" 
 			+ "<if test='brand!=null '>"
-			+ " and VehicleBrand in (SELECT value FROM sc_brand WHERE name like '%${brand}%')"
+		/*	+ " and VehicleBrand in (SELECT value FROM sc_brand WHERE name like '%${brand}%')"*/
+			+ " and VehicleBrand =${brand}"
+
 			+ "</if>"
 			+ "<if test='qclass!=null '>" 
 			+ " AND VehicleClass in (SELECT code FROM sc_vehicleclass WHERE info like '%${qclass}%')"
@@ -216,7 +219,8 @@ public interface ScETCPDao extends BaseDao<ScEtcptjdEntity> {
 			+ " AND e.VehicleModel in (SELECT value FROM sc_model WHERE model like '%${model}%')"
 			+ "</if>" 
 			+ "<if test='brand!=null '>"
-			+ " and e.VehicleBrand in (SELECT value FROM sc_brand WHERE name like '%${brand}%')"
+			/*+ " and e.VehicleBrand in (SELECT value FROM sc_brand WHERE name like '%${brand}%')"*/
+			+ " and e.VehicleBrand = ${brand}"
 			+ "</if>"
 			+ "<if test='qclass!=null '>" 
 			+ " AND e.VehicleClass in (SELECT code FROM sc_vehicleclass WHERE info like '%${qclass}%')"
@@ -326,7 +330,9 @@ public interface ScETCPDao extends BaseDao<ScEtcptjdEntity> {
 			+ " AND VehicleModel = (SELECT value FROM sc_model WHERE model = #{model})"
 			+ "</if>"
 			+ "<if test='brand!=null '>"
-			+ " and VehicleBrand = (SELECT value FROM sc_brand WHERE name = #{brand})"
+			/*lxm修改
+			+ " and VehicleBrand = (SELECT value FROM sc_brand WHERE name = #{brand})"*/
+			+ " and VehicleBrand = ${brand} "
 			+ "</if>"
 			+ "<if test='qclass!=null '>" 
 			+ " AND VehicleClass = (SELECT code FROM sc_vehicleclass WHERE info = #{qclass})"
@@ -437,6 +443,9 @@ public interface ScETCPDao extends BaseDao<ScEtcptjdEntity> {
 	
 	@Select("SELECT id,mc from sc_kkxx ")
 	List<ScKkxxEntity> kakouByName();
+
+	@Select("select eid,name from sc_etcp_coordinate")
+    List<Coordinate>SearchEtcpMc();
 	
 	@Insert("insert into sc_key_value (" 
 			+ "id," 
@@ -590,4 +599,8 @@ public interface ScETCPDao extends BaseDao<ScEtcptjdEntity> {
 
 	@Select("SELECT id,mc from sc_kkxx where mc=#{tags}")
 	List<ScKkxxEntity> kakouByTags(@Param("tags")String tags);
+
+	@Select("select eid,name from sc_etcp_coordinate where name=#{address}")
+    List<Coordinate>SearchEtcpAddress(@Param("name")String address);
+
 }

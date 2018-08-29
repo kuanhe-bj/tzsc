@@ -36,7 +36,7 @@ $(function () {
 	        url: ph , 
 	        page:pa,
 	        datatype: "json",
-	        colModel: [	
+	        colModel: [
 				{ label: '车牌号码', name: 'carNumber', index: 'CAR_NUMBER', width: 80 },
 				{ label: '进入时间', name: 'enterTime', index: 'ENTER_TIME', width: 150 
 				/*	,formatter: function(value,row,index){
@@ -186,6 +186,7 @@ var vm = new Vue({
 			this.showList = true;
 			var sTime=$("#startTime").val();
 			var eTime=$("#endTime").val();
+            var address=$("#address").val();
 			var cph=$("#cph").val();
 			if (cph!=null) {
 				cph = cph.replace(/ /g,'');
@@ -194,7 +195,7 @@ var vm = new Vue({
 			var page = $("#jqGrid").jqGrid('getGridParam','page');
 			$("#jqGrid").jqGrid('setGridParam',{ 
 				url: baseURL +"etcp/etcpList" , 
-				postData:{'cph': cph,'qssj':sTime,'jssj':eTime,'park':this.q.park,'address':this.q.address},
+				postData:{'cph': cph,'qssj':sTime,'jssj':eTime,'park':this.q.park,'address':address},
                 page:1
             }).trigger("reloadGrid");
 		}

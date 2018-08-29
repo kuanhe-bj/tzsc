@@ -40,7 +40,7 @@ public class Sc_etcptjdController {
 		Query query = new Query(params);
 		
 		List<ScEtcptjdEntity> list = sc_etcptjdService.findByCPH(query);
-		
+		log.info("返回结果：{}", query);
 		int total = sc_etcptjdService.total(query);
 		
 		PageUtils pageUtil = new PageUtils(list, total, query.getLimit(), query.getPage());
