@@ -8,7 +8,7 @@ var wd;
 var adress;
 var url = '';
 var carNum = $("#carNum").val();
-alert(carNum);
+
 $(function () {
 	var carnum = sessionStorage.getItem("carNum");
 	var start = sessionStorage.getItem("start");

@@ -77,21 +77,21 @@ $(function() {
 						strokeColor:"#CC0000",
 						fillColor:"#FF0000",
 						strokeWidth:2 ,
-						fillOpacity:0.5
+						fillOpacity:0.1
 						};
 			}else if(count[i]<20&&count[i]>5){
 				cercleVector.style={
 						strokeColor:"#CC6633",
 						fillColor:"#FF6600",
 						strokeWidth:2 ,
-						fillOpacity:0.5
+						fillOpacity:0.1
 						};
 			}else if(count[i]<=5){
 				cercleVector.style={
 						strokeColor:"#1E90FF",
 						fillColor:"#C6E2FF",
 						strokeWidth:2 ,
-						fillOpacity:0.5
+						fillOpacity:0.1
 						};
 			}
 			vectorLayer.addFeatures(cercleVector);
